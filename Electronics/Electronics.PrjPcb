@@ -107,23 +107,6 @@ GenerateClassCluster=0
 DocumentUniqueId=CQUANEYL
 
 [Document5]
-DocumentPath=Rectifier.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=OMQRJBRL
-
-[Document6]
 DocumentPath=Digital.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -972,7 +955,7 @@ Type55=1
 Type56=2
 Type57=1
 Type58=1
-Type59=2
+Type59=0
 Type60=1
 Type61=2
 Type62=2
