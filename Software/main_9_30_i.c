@@ -39,28 +39,27 @@ void main(void)
 
     // EMG Decoder Loop
     while(1) {
-		
-		GetData();//Acquire voltage
-		EMG=Decode(V1,V2);//Decode
-		Transmit(EMG);// Print value to screen or communication
 
-		//For now display the two voltage results
-		
+		GetData(); // Acquire voltages
+		EMG=Decode(V1,V2); // Decode
+		Transmit(EMG); // Print value to screen or communication
+
+		// For now, display the two voltage results
 		LCDGoto(0,0);
-		sprintf(str,"%04u",V1); //Approximate conversion to 0-5V
+		sprintf(str,"%04u",V1);
         LCDPutChar(str[0]);
         LCDPutChar(str[1]);
         LCDPutChar(str[2]);
         LCDPutChar(str[3]);
         LCDGoto(0,1);
-        sprintf(str,"%04u",V2); //Approximate conversion to 0-5V
+        sprintf(str,"%04u",V2); 
         LCDPutChar(str[0]);
         LCDPutChar(str[1]);
         LCDPutChar(str[2]);
         LCDPutChar(str[3]);
-        Delay10KTCYx(200);           // Delay 2/10 second
-		}
+        Delay10KTCYx(200);           // Delay 2 seconds
 		
+	};
 }
 
 //Initialize necessary systems
@@ -81,7 +80,7 @@ void SysInit(void)
     ANSELAbits.ANSA1 = 1;
     TRISAbits.RA1 = 1; //Analog in
 
-    //Set uo ADC parameters
+    //Set up ADC parameters
     ADCON2bits.ACQT=001; //2 TAD
     ADCON2bits.ADCS=010; //FOSC/32
     ADCON2bits.ADFM=1; //Right justified***
@@ -92,18 +91,15 @@ void SysInit(void)
     TRISD = 0x00; //Digital out
     LCDInit(); //Start LCD
     LCDWriteStr("Starting device...");
+
+	//Reset variables
+	V1=0;
+	V2=0;
+	EMG=0;
 }
 
 
-
-//Subroutines
-
-
-//Return 1 if RA4 button has been pressed, 0 otherwise
-//
-//Be sure to include some form of debouncing
-//
-//The button is accessed using PORTAbits.RA4, a 0 means the button is pressed
+// ADC sampling of EMG leads
 void GetData(void)
 {
 	//Channel1
@@ -114,7 +110,6 @@ void GetData(void)
     V1=(V1<<8) | ADRESL; //Math needs to be done in the int variable
     if(V1==1023) //Fix roundoff error
             V1=1022;
-
     //Channel2
     ADCON0bits.CHS=0001; //Select RA1
 	ADCON0bits.GO=1; //Start conversion
@@ -125,10 +120,13 @@ void GetData(void)
             V2=1022;
 }
 
+// Decode the two digital signals
 int Decode(unsigned int voltage1, unsigned int voltage2){
 	return 0;
 }
-void Transmit(int result){
+
+// Transmit the result to external interface
+void Transmit(int info){
 
 }
 
