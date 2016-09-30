@@ -1,15 +1,13 @@
 /*
- * BME 464 - Lab B
+ * BME 464 - EMG Decoder
  *
- * Run a real-time clock and display the time on the LCD
- * Template: Nick Bottenus - 9/3/12
- * Student: Pum Wiboonsaksakul
+ * Decodes signals from two EMG leads and sends result to an external interface
  * 
  */
 
 #include "Lcd.h"
 #include <delays.h> //delay header
-#include <p18f46k22.h> //chip stuff
+#include <p18f46k22.h> //chip header
 #include <stdio.h>
 
 #pragma config FOSC = INTIO67   // Internal OSC block, Port Function on RA6/7
@@ -18,28 +16,28 @@
 
 //Define statements
  #define Running 0
- 
 
 //Variable definitions
-unsigned int V1 = 0;
-unsigned int V2 = 0;
-int EMG = 0;
+unsigned int V1; // signal from lead 1
+unsigned int V2; // signal from lead 2
+int EMG; // decoded result
 
 //Function definitions
 void SysInit(void);
 void GetData(void);
 int Decode(unsigned int voltage1, unsigned int voltage2);
-void Transmit(int result);
-
+void Transmit(int info);
 
 void main(void)
 {
+    // Local variables
     char str[4];
+	
     //Initialize
     SysInit();
     LCDClear();
 
-    //Loop
+    // EMG Decoder Loop
     while(1) {
 		
 		GetData();//Acquire voltage
