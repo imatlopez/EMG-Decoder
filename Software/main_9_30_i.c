@@ -11,54 +11,45 @@
 #include <stdio.h>
 
 #pragma config FOSC = INTIO67   // Internal OSC block, Port Function on RA6/7
-#pragma config WDTEN = OFF      // Watch Dog Timer disabled. SWDTEN no effect
+#pragma config WDTEN = SWON     // Watch Dog Timer controlled by SWDTEN bit
+#pragma config WDTPS = 512      // WDT Postscale of 1:512, equivalent to 2 secs
 #pragma config XINST = OFF      // Instruction set Extension and indexed Addressing mode disabled
 
 //Define statements
- #define Running 0
+#define Running 0
+#define Sleeping 1 
 
 //Variable definitions
 unsigned int V1; // signal from lead 1
 unsigned int V2; // signal from lead 2
 int EMG; // decoded result
+int State;
 
 //Function definitions
 void SysInit(void);
 void GetData(void);
 int Decode(unsigned int voltage1, unsigned int voltage2);
 void Transmit(int info);
+void SleepMode(void);
 
 void main(void)
 {
-    // Local variables
-    char str[4];
-	
     //Initialize
     SysInit();
     LCDClear();
 
     // EMG Decoder Loop
     while(1) {
-
+		if (State == Running){
 		GetData(); // Acquire voltages
 		EMG=Decode(V1,V2); // Decode
 		Transmit(EMG); // Print value to screen or communication
-
-		// For now, display the two voltage results
-		LCDGoto(0,0);
-		sprintf(str,"%04u",V1);
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-        LCDGoto(0,1);
-        sprintf(str,"%04u",V2); 
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-        Delay10KTCYx(200);           // Delay 2 seconds
-		
+        Delay10KTCYx(200);           // Delay 1 second
+		}
+   
+		if (State == Sleeping){
+            SleepMode();      
+		}
 	};
 }
 
@@ -86,6 +77,12 @@ void SysInit(void)
     ADCON2bits.ADFM=1; //Right justified***
     ADCON0bits.ADON=1; //Turn on A/D
 
+	//Set up sleep mode
+	OSCCONbits.IDLEN = 0;
+
+	//Set up Watchdog Timer
+	WDTCONbits.SWDTEN = 1; // Turn on WDT
+
     //Set up LCD
     ANSELD = 0x00;
     TRISD = 0x00; //Digital out
@@ -96,8 +93,8 @@ void SysInit(void)
 	V1=0;
 	V2=0;
 	EMG=0;
+	State=0;
 }
-
 
 // ADC sampling of EMG leads
 void GetData(void)
@@ -127,6 +124,31 @@ int Decode(unsigned int voltage1, unsigned int voltage2){
 
 // Transmit the result to external interface
 void Transmit(int info){
+    // Local variables
+    char str[4];
+	
+    // For now, display the two voltage results
+    LCDClear();
+    LCDGoto(0,0);
+	sprintf(str,"%04u",V1);
+    LCDPutChar(str[0]);
+    LCDPutChar(str[1]);
+    LCDPutChar(str[2]);
+    LCDPutChar(str[3]);
+    LCDGoto(0,1);
+    sprintf(str,"%04u",V2); 
+    LCDPutChar(str[0]);
+    LCDPutChar(str[1]);
+    LCDPutChar(str[2]);
+    LCDPutChar(str[3]);
+    
+    State++;
+}
 
+void SleepMode(void){
+    LCDClear();
+    LCDWriteStr("SLEEP MODE");
+    Sleep();
+    State = 0;  
 }
 
