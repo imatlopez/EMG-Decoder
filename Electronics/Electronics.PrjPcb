@@ -30,7 +30,7 @@ DItemRevisionGUID=
 ReportSuppressedErrorsInMessages=0
 FSMCodingStyle=eFMSDropDownList_OneProcess
 FSMEncodingStyle=eFMSDropDownList_OneHot
-OutputPath=Project Outputs for Electronics
+OutputPath=
 LogFolderPath=
 ManagedProjectGUID=
 
@@ -157,210 +157,84 @@ DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=UGQDKUHI
 
-[Document8]
-DocumentPath=CAMtastic1.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
-[Document9]
-DocumentPath=CAMtastic2.Cam
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=-1
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=
-
 [GeneratedDocument1]
-DocumentPath=Project Outputs for Electronics\Assembly Testpoint Report for Main.csv
-DItemRevisionGUID=
-
-[GeneratedDocument2]
 DocumentPath=Project Outputs for Electronics\Test Points\Assembly Testpoint Report for Main.csv
 DItemRevisionGUID=
 
-[GeneratedDocument3]
-DocumentPath=Project Outputs for Electronics\Design Rule Check - Main.html
-DItemRevisionGUID=
-
-[GeneratedDocument4]
-DocumentPath=Project Outputs for Electronics\ERC\Electronics.html
-DItemRevisionGUID=
-
-[GeneratedDocument5]
-DocumentPath=Project Outputs for Electronics\Main.DRR
-DItemRevisionGUID=
-
-[GeneratedDocument6]
+[GeneratedDocument2]
 DocumentPath=Project Outputs for Electronics\NC Drill\Main.DRR
 DItemRevisionGUID=
 
-[GeneratedDocument7]
+[GeneratedDocument3]
 DocumentPath=Project Outputs for Electronics\AutoCAD PCB\Main.DWG
 DItemRevisionGUID=
 
-[GeneratedDocument8]
+[GeneratedDocument4]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main.EXTREP
 DItemRevisionGUID=
 
-[GeneratedDocument9]
-DocumentPath=Project Outputs for Electronics\Main.EXTREP
-DItemRevisionGUID=
-
-[GeneratedDocument10]
-DocumentPath=Project Outputs for Electronics\DRC\Main.html
-DItemRevisionGUID=
-
-[GeneratedDocument11]
-DocumentPath=Project Outputs for Electronics\Main.LDP
-DItemRevisionGUID=
-
-[GeneratedDocument12]
+[GeneratedDocument5]
 DocumentPath=Project Outputs for Electronics\NC Drill\Main.LDP
 DItemRevisionGUID=
 
-[GeneratedDocument13]
+[GeneratedDocument6]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main.REP
 DItemRevisionGUID=
 
-[GeneratedDocument14]
-DocumentPath=Project Outputs for Electronics\Main.REP
-DItemRevisionGUID=
-
-[GeneratedDocument15]
+[GeneratedDocument7]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main.RUL
 DItemRevisionGUID=
 
-[GeneratedDocument16]
-DocumentPath=Project Outputs for Electronics\Main.RUL
-DItemRevisionGUID=
-
-[GeneratedDocument17]
+[GeneratedDocument8]
 DocumentPath=Project Outputs for Electronics\ExportSTEP\Main.step
 DItemRevisionGUID=
 
-[GeneratedDocument18]
-DocumentPath=Project Outputs for Electronics\Main.TXT
-DItemRevisionGUID=
-
-[GeneratedDocument19]
+[GeneratedDocument9]
 DocumentPath=Project Outputs for Electronics\NC Drill\Main.TXT
 DItemRevisionGUID=
 
-[GeneratedDocument20]
+[GeneratedDocument10]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument21]
-DocumentPath=Project Outputs for Electronics\Main_Copper_Signal_Bot.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument22]
+[GeneratedDocument11]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument23]
-DocumentPath=Project Outputs for Electronics\Main_Copper_Signal_Top.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument24]
+[GeneratedDocument12]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument25]
-DocumentPath=Project Outputs for Electronics\Main_Legend_Bot.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument26]
+[GeneratedDocument13]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument27]
-DocumentPath=Project Outputs for Electronics\Main_Legend_Top.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument28]
-DocumentPath=Project Outputs for Electronics\Main_Mechanical_13.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument29]
-DocumentPath=Project Outputs for Electronics\Main_Mechanical_15.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument30]
+[GeneratedDocument14]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument31]
-DocumentPath=Project Outputs for Electronics\Main_Pads_Bot.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument32]
+[GeneratedDocument15]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument33]
-DocumentPath=Project Outputs for Electronics\Main_Pads_Top.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument34]
+[GeneratedDocument16]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Paste_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument35]
-DocumentPath=Project Outputs for Electronics\Main_Paste_Bot.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument36]
+[GeneratedDocument17]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Paste_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument37]
-DocumentPath=Project Outputs for Electronics\Main_Paste_Top.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument38]
+[GeneratedDocument18]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Profile.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument39]
-DocumentPath=Project Outputs for Electronics\Main_Profile.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument40]
+[GeneratedDocument19]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Soldermask_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument41]
-DocumentPath=Project Outputs for Electronics\Main_Soldermask_Bot.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument42]
+[GeneratedDocument20]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Soldermask_Top.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument43]
-DocumentPath=Project Outputs for Electronics\Main_Soldermask_Top.gbr
 DItemRevisionGUID=
 
 [Configuration1]
@@ -409,7 +283,7 @@ SCH_HasExpandLogicalToPhysicalSheets=-1
 SaveSettingsToOutJob=-1
 
 [Generic_EDE]
-OutputDir=Project Outputs for Electronics
+OutputDir=
 
 [OutputGroup1]
 Name=Netlist Outputs
