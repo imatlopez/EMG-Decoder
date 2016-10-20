@@ -1,10 +1,10 @@
-Output: Mixed Sim
-Type  : AdvSimNetlist
-From  : Project [Electronics.PrjPcb]
-   Generated File[Electronics.nsx]
+Output: Test Point Report
+Type  : Test Points
+From  : PCB Document [Main.PcbDoc]
+   Generated File[Assembly Testpoint Report for Main.csv]
 
 
 Files Generated   : 1
 Documents Printed : 0
 
-Finished Output Generation At 4:48:07 PM On 9/28/16
+Finished Output Generation At 9:00:29 AM On 10/20/16
