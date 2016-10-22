@@ -1,10 +1,23 @@
-Output: Test Point Report
-Type  : Test Points
+Output: Gerber X2 Files
+Type  : GerberX2
 From  : PCB Document [Main.PcbDoc]
-   Generated File[Assembly Testpoint Report for Main.csv]
+   Generated File[Main_Copper_Signal_Top.gbr]
+   Generated File[Main_Copper_Signal_Bot.gbr]
+   Generated File[Main_Pads_Bot.gbr]
+   Generated File[Main_Pads_Top.gbr]
+   Generated File[Main_Legend_Top.gbr]
+   Generated File[Main_Soldermask_Top.gbr]
+   Generated File[Main_Paste_Bot.gbr]
+   Generated File[Main_Legend_Bot.gbr]
+   Generated File[Main_Soldermask_Bot.gbr]
+   Generated File[Main_Paste_Top.gbr]
+   Generated File[Main_Profile.gbr]
+   Generated File[Main.RUL]
+   Generated File[Main.EXTREP]
+   Generated File[Main.REP]
 
 
-Files Generated   : 1
+Files Generated   : 14
 Documents Printed : 0
 
-Finished Output Generation At 9:05:48 AM On 10/20/16
+Finished Output Generation At 1:36:50 PM On 10/22/16
