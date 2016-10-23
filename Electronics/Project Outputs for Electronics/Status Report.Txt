@@ -1,10 +1,23 @@
-Output: Mixed Sim
-Type  : AdvSimNetlist
-From  : Project [Electronics.PrjPcb]
-   Generated File[Electronics.nsx]
+Output: Gerber X2 Files
+Type  : GerberX2
+From  : PCB Document [Main.PcbDoc]
+   Generated File[Main_Copper_Signal_Top.gbr]
+   Generated File[Main_Copper_Signal_Bot.gbr]
+   Generated File[Main_Pads_Bot.gbr]
+   Generated File[Main_Pads_Top.gbr]
+   Generated File[Main_Legend_Top.gbr]
+   Generated File[Main_Soldermask_Top.gbr]
+   Generated File[Main_Paste_Bot.gbr]
+   Generated File[Main_Legend_Bot.gbr]
+   Generated File[Main_Soldermask_Bot.gbr]
+   Generated File[Main_Paste_Top.gbr]
+   Generated File[Main_Profile.gbr]
+   Generated File[Main.RUL]
+   Generated File[Main.EXTREP]
+   Generated File[Main.REP]
 
 
-Files Generated   : 1
+Files Generated   : 14
 Documents Printed : 0
 
-Finished Output Generation At 4:48:07 PM On 9/28/16
+Finished Output Generation At 1:36:50 PM On 10/22/16
