@@ -11,8 +11,9 @@
 #include <stdio.h>
 
 #pragma config FOSC = INTIO67   // Internal OSC block, Port Function on RA6/7
-#pragma config WDTEN = SWON     // Watch Dog Timer controlled by SWDTEN bit
-#pragma config WDTPS = 512      // WDT Postscale of 1:512, equivalent to 2 secs
+// #pragma config WDTEN = SWON     // Watch Dog Timer controlled by SWDTEN bit
+#pragma config WDTEN = OFF      // Watch Dog Timer disabled. SWDTEN no effect
+// #pragma config WDTPS = 512      // WDT Postscale of 1:512, equivalent to 2 secs
 #pragma config XINST = OFF      // Instruction set Extension and indexed Addressing mode disabled
 
 //Define statements
@@ -29,6 +30,7 @@ int EMG; // decoded result
 int State;
 int max;
 int min;
+int recComm; // received signal via communication
 
 //Function definitions
 void SysInit(void);
@@ -45,15 +47,23 @@ void main(void)
 
     // EMG Decoder Loop
     while(1) {
-		if (State == Running) { 
+		// if (State == Running) { 
             GetData(); // Acquire voltages
             EMG=Decode(V1,V2); // Decode
             Transmit(EMG); // Print value to screen or communication
             Delay10KTCYx(10);  // Delay 1/10 second
-		}
-		if (State == Sleeping){
+		// }
+		// if (State == Sleeping){
            // SleepMode();      
-		}
+		// }
+
+		/* // For Communication Testing
+		TXREG1=98;        // Set info to be transmitted
+		Delay10KTCYx(50);           // Delay 2 seconds        
+		recComm=RCREG1;        // Read info received       
+		LCDGoto(0,0);  
+		LCDPutByte(recComm);        
+		*/
 	};
 }
 
@@ -87,7 +97,7 @@ void SysInit(void)
 	OSCCONbits.IDLEN = 0;
 
 	//Set up Watchdog Timer
-	WDTCONbits.SWDTEN = 1; // Turn on WDT
+	// WDTCONbits.SWDTEN = 1; // Turn on WDT
 
     //Set up LCD
     ANSELD = 0x00;
@@ -95,6 +105,17 @@ void SysInit(void)
     LCDInit(); //Start LCD
     LCDWriteStr("Starting device...");
 
+	//Set up async EUSART    
+	TRISCbits.RC6 = 1; //Initialize TX pin (transmission) 
+	TRISCbits.RC7 = 1; //Initialize RX pin (reception)
+	TXSTA1bits.BRGH=0; //Use low     
+	BAUDCON1bits.BRG16=0; //Use 8-bit transmission 
+	SPBRG1=5;   //Set baud rate to 10417    
+	TXSTA1bits.SYNC=0; //Specify async mode    
+	RCSTA1bits.SPEN=1; //Enable EUSART    
+	TXSTA1bits.TXEN=1; //Enable transmission         
+	RCSTA1bits.CREN=1; //Enable receiver
+	
 	//Reset variables
 	i=0;
 	V1=0;
@@ -103,6 +124,7 @@ void SysInit(void)
 	State=0;
 	min = 0;
 	max = 0;
+	recComm = 0;
 }
 
 // ADC sampling of EMG leads
