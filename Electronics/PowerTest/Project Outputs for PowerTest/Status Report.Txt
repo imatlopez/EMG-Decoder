@@ -1,0 +1,13 @@
+Output: Gerber X2 Files
+Type  : GerberX2
+From  : Project [PowerTest.PrjPcb]
+   Generated File[PCB_Copper_Signal_Top.gbr]
+   Generated File[PCB.RUL]
+   Generated File[PCB.EXTREP]
+   Generated File[PCB.REP]
+
+
+Files Generated   : 4
+Documents Printed : 0
+
+Finished Output Generation At 12:12:28 AM On 10/24/16

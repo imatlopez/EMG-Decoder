@@ -3,3 +3,9 @@ Electronics/__Previews/*
 
 .DS_Store
 *.LOG
+
+*.SchDocPreview
+
+*.PcbDocPreview
+
+*.Zip

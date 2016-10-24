@@ -1,0 +1,4 @@
+Record=TopLevelDocument|FileName=Power.SchDoc
+Record=SheetSymbol|SourceDocument=Power.SchDoc|Designator=Neg|SchDesignator=Neg|FileName=Vss.SchDoc|SymbolType=Normal|RawFileName=Vss.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Power.SchDoc|Designator=Pos|SchDesignator=Pos|FileName=Vdd.SchDoc|SymbolType=Normal|RawFileName=Vdd.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Power.SchDoc|Designator=U_Digital|SchDesignator=U_Digital|FileName=Digital.SchDoc|SymbolType=Normal|RawFileName=Digital.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
