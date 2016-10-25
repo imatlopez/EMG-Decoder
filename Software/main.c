@@ -21,11 +21,8 @@
 #define Sleeping 1 
 
 //Variable definitions
-unsigned int voltVals1[3]; // signal from lead 1
-unsigned int voltVals2[3]; // signal from lead 2
-int i; // counter 
-unsigned int V1; // moving average signal from lead 1
-unsigned int V2; // moving average signal from lead 2
+unsigned int V1; // signal from lead 1
+unsigned int V2; // signal from lead 2
 int EMG; // decoded result
 int State;
 int max;
@@ -47,6 +44,8 @@ void main(void)
 
     // EMG Decoder Loop
     while(1) {
+        
+        // For EMG decoding
 		// if (State == Running) { 
             GetData(); // Acquire voltages
             EMG=Decode(V1,V2); // Decode
@@ -56,13 +55,14 @@ void main(void)
 		// if (State == Sleeping){
            // SleepMode();      
 		// }
-
-		/* // For Communication Testing
-		TXREG1=98;        // Set info to be transmitted
-		Delay10KTCYx(50);           // Delay 2 seconds        
-		recComm=RCREG1;        // Read info received       
-		LCDGoto(0,0);  
-		LCDPutByte(recComm);        
+         
+		/*
+        // For Communication Testing
+		TXREG1=60; // Set info to be transmitted
+		Delay10KTCYx(50); // Delay 2 seconds        
+		recComm=RCREG1; // Read info received       
+		LCDGoto(0,0);
+		LCDPutByte(recComm);
 		*/
 	};
 }
@@ -113,11 +113,11 @@ void SysInit(void)
 	SPBRG1=5;   //Set baud rate to 10417    
 	TXSTA1bits.SYNC=0; //Specify async mode    
 	RCSTA1bits.SPEN=1; //Enable EUSART    
-	TXSTA1bits.TXEN=1; //Enable transmission         
+	TXSTA1bits.TXEN=1; //Enable transmission
+    ANSELC=0x00;           
 	RCSTA1bits.CREN=1; //Enable receiver
 	
 	//Reset variables
-	i=0;
 	V1=0;
 	V2=0;
 	EMG=0;
@@ -129,31 +129,22 @@ void SysInit(void)
 
 // ADC sampling of EMG leads
 void GetData(void) {
-	unsigned int volt;
 	//Channel1
 	ADCON0bits.CHS=0001; //Select RA1
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
-    volt=ADRESH;
-    volt=(volt<<8) | ADRESL; //Math needs to be done in the int variable
-    if(volt==1023) //Fix roundoff error
-            volt=1022;
-	voltVals1[i] = volt;
+    V1=ADRESH;
+    V1=(V1<<8) | ADRESL; //Math needs to be done in the int variable
+    if(V1==1023) //Fix roundoff error
+            V1=1022;
     //Channel2
     ADCON0bits.CHS=0010; //Select RA2
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
-    volt=ADRESH;
-    volt=(volt<<8) | ADRESL; //Math needs to be done in the int variable
-    if(volt==1023) //Fix roundoff error
-            volt=1022;
-	voltVals2[i] = volt;
-	i++;
-	if(i>2)
-		i=0;
-	//Find moving average
-	V1=(voltVals1[0]+voltVals1[1]+voltVals1[2])/3;
-	V2 = (voltVals2[0]+voltVals2[1]+voltVals2[2])/3;
+    V2=ADRESH;
+    V2=(V2<<8) | ADRESL; //Math needs to be done in the int variable
+    if(V2==1023) //Fix roundoff error
+            V2=1022;
 }
 
 // Decode the two digital signals
@@ -176,18 +167,9 @@ int Decode(unsigned int voltage1, unsigned int voltage2){
 
 // Transmit the result to external interface
 void Transmit(int info){
-    // Local variables
-    char str[4];
-	
-    // For now, display the two voltage results
+    // For now, display EMG
     LCDClear();
     LCDGoto(0,0);
-	sprintf(str,"%04u",V1);
-    LCDPutChar(str[0]);
-    LCDPutChar(str[1]);
-    LCDPutChar(str[2]);
-    LCDPutChar(str[3]);
-    LCDGoto(0,1);
     LCDPutByte(EMG);
     
     State++;
