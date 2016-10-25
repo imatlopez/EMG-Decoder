@@ -1,57 +1,57 @@
 Protel Design System Design Rule Check
 PCB File : \\Mac\Home\Desktop\Duke\BME464\Electronics\PowerTest\PCB.PcbDoc
 Date     : 10/24/16
-Time     : 12:11:40 AM
+Time     : 10:39:10 PM
 
-Processing Rule : Room U_Digital (Bounding Region = (1575mil, 2100mil, 2350mil, 2800mil) (InComponentClass('U_Digital'))
-Rule Violations :0
-
-Processing Rule : Room Power (Bounding Region = (2500mil, 2500mil, 3000mil, 3000mil) (InComponentClass('Power'))
-Rule Violations :0
-
-Processing Rule : Room Pos (Bounding Region = (2175mil, 1250mil, 2875mil, 1725mil) (InComponentClass('Pos'))
-Rule Violations :0
-
-Processing Rule : Room Neg (Bounding Region = (1125mil, 1125mil, 2075mil, 1850mil) (InComponentClass('Neg'))
-Rule Violations :0
-
-Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
-Rule Violations :0
-
-Processing Rule : Net Antennae (Tolerance=0mil) (All)
-Rule Violations :0
-
-Processing Rule : Silk to Silk (Clearance=5mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Silk To Solder Mask (Clearance=2mil) (IsPad),(All)
-Rule Violations :0
-
-Processing Rule : Minimum Solder Mask Sliver (Gap=0mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Hole Size Constraint (Min=1mil) (Max=100mil) (All)
-Rule Violations :0
-
-Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
-Rule Violations :0
-
-Processing Rule : Width Constraint (Min=10mil) (Max=20mil) (Preferred=20mil) (All)
-Rule Violations :0
-
-Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=20mil) (Air Gap=20mil) (Entries=4) (All)
-Rule Violations :0
-
-Processing Rule : Clearance Constraint (Gap=5mil) (All),(All)
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
 Rule Violations :0
 
 Processing Rule : Un-Routed Net Constraint ( (All) )
 Rule Violations :0
 
-Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Processing Rule : Clearance Constraint (Gap=5mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=20mil) (Air Gap=20mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=10mil) (Max=20mil) (Preferred=20mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=1mil) (Max=100mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=2mil) (IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=5mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Room Neg (Bounding Region = (1125mil, 1125mil, 2075mil, 1850mil) (InComponentClass('Neg'))
+Rule Violations :0
+
+Processing Rule : Room Pos (Bounding Region = (2175mil, 1250mil, 2875mil, 1725mil) (InComponentClass('Pos'))
+Rule Violations :0
+
+Processing Rule : Room Power (Bounding Region = (2500mil, 2500mil, 3000mil, 3000mil) (InComponentClass('Power'))
+Rule Violations :0
+
+Processing Rule : Room U_Digital (Bounding Region = (1575mil, 2100mil, 2350mil, 2800mil) (InComponentClass('U_Digital'))
 Rule Violations :0
 
 
