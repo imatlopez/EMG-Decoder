@@ -32,6 +32,7 @@ int EMG; // decoded result
 void SysInit(void);
 void GetData(void);
 unsigned int Process(unsigned int value, unsigned int old);
+
 int Decode(unsigned int voltage1, unsigned int voltage2);
 void Transmit(int info);
 

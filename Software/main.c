@@ -8,7 +8,7 @@
 #include "Lcd.h"
 #include <delays.h> //delay header
 #include <p18f46k22.h> //chip header
-#include <stdio.h>
+#include <stdio.h> //enable 
 
 #pragma config FOSC = INTIO67   // Internal OSC block, Port Function on RA6/7
 // #pragma config WDTEN = SWON     // Watch Dog Timer controlled by SWDTEN bit
@@ -23,6 +23,12 @@
 //Variable definitions
 unsigned int V1; // signal from lead 1
 unsigned int V2; // signal from lead 2
+unsigned int DV1; // debounced signal from lead 1
+unsigned int DV2; // debounced signal from lead 2
+unsigned int oldDV1; // old debounced signal from lead 1
+unsigned int oldDV2; // old debounced signal from lead 2
+int Thresh; // threshold for voltage classification
+int Hyst; // hysteresis range
 int EMG; // decoded result
 int State;
 int max;
@@ -32,9 +38,12 @@ int recComm; // received signal via communication
 //Function definitions
 void SysInit(void);
 void GetData(void);
+unsigned int DebounceChan(unsigned int value, unsigned int old);
 int Decode(unsigned int voltage1, unsigned int voltage2);
 void Transmit(int info);
 void SleepMode(void);
+//Test functions
+void Lights(void);
 
 void main(void)
 {
@@ -125,43 +134,83 @@ void SysInit(void)
 	min = 0;
 	max = 0;
 	recComm = 0;
+	//Set threshold & hysteresis variable
+	PV1=0;
+    PV2=0;
+    oldPV1=0;
+    oldPV2=0;
+    Thresh=512; //Initial threshold
+    Hyst=100; //Hysteresis width
 }
 
 // ADC sampling of EMG leads
 void GetData(void) {
+	
 	//Channel1
 	ADCON0bits.CHS=0001; //Select RA1
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
     V1=ADRESH;
-    V1=(V1<<8) | ADRESL; //Math needs to be done in the int variable
-    if(V1==1023) //Fix roundoff error
-            V1=1022;
+    V1=(V1<<8) | ADRESL; //Make 10-bit
+    //Process voltage from channel 1
+    DV1=DebounceChan(V1,oldDV1);
+    oldPV1=DV1;
+
     //Channel2
     ADCON0bits.CHS=0010; //Select RA2
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
     V2=ADRESH;
-    V2=(V2<<8) | ADRESL; //Math needs to be done in the int variable
-    if(V2==1023) //Fix roundoff error
-            V2=1022;
+    V2=(V2<<8) | ADRESL; //Make 10-bit
+    //Process voltage from channel 2
+    DV2=DebounceChan(V2,oldDV2);
+    oldDV2=PV2;
+
 }
+
+//Hysteresis for each channel
+unsigned int DebounceChan(unsigned int value, unsigned int old){
+// If the level was low before, raise the threshold
+if (old==0){
+    //process if voltage is lower or higher than threshold
+    if (value>=Thresh+Hyst){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+// If the level was high before, lower the threshold
+else{
+    if (value>=Thresh-Hyst){
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+}
+
+
 
 // Decode the two digital signals
 int Decode(unsigned int voltage1, unsigned int voltage2){
-	int thres;
-	if(voltage1>max)
-		max = voltage1;
-	if(voltage1<min)
-		min = voltage1;
-	thres = (min+max)/2;
-	if(voltage1>thres){
-        PORTBbits.RB0=1;
-		return 1;
+	//Decode based on binary inputs
+	if (voltage1==1){
+        if(voltage2==1){
+            return 3; //11
+        }
+        else {
+            return 2; //10
+        }
     }
-	else{
-        PORTBbits.RB0=0;
-		return 0;
+    else {
+        if(voltage2==1){
+            return 1; //01
+        }
+        else {
+            return 0; //00
+        }
     }
 }
 
@@ -180,5 +229,29 @@ void SleepMode(void){
     LCDWriteStr("SLEEP MODE");
     Sleep();
     State = 0;  
+}
+
+//Test functions
+void Lights(void){
+	switch(EMG){
+		//Turn all LEDs off
+		PORTBbits.RB3=0;
+		PORTBbits.RB2=0;
+		PORTBbits.RB1=0;
+		PORTBbits.RB0=0;
+		//Turn on based on EMG
+		case 3:
+		PORTBbits.RB3=1;
+		break;
+		case 2:
+		PORTBbits.RB2=1;
+		break;
+		case 1:
+		PORTBbits.RB1=1;
+		break;
+		case 0:
+		PORTBbits.RB0=1;
+		break;
+	}
 }
 
