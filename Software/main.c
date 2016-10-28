@@ -12,7 +12,7 @@
 
 #pragma config FOSC = INTIO67   // Internal OSC block, Port Function on RA6/7
 // #pragma config WDTEN = SWON     // Watch Dog Timer controlled by SWDTEN bit
-#pragma config WDTEN = OFF      // Watch Dog Timer disabled. SWDTEN no effect
+#pragma config WDTEN = OFFÂ Â Â Â Â  // Watch Dog Timer disabled. SWDTEN no effect
 // #pragma config WDTPS = 512      // WDT Postscale of 1:512, equivalent to 2 secs
 #pragma config XINST = OFF      // Instruction set Extension and indexed Addressing mode disabled
 
@@ -47,6 +47,8 @@ void Lights(void);
 
 void main(void)
 {
+     // Local variables
+    char str[4];
     //Initialize
     SysInit();
     LCDClear();
@@ -57,8 +59,27 @@ void main(void)
         // For EMG decoding
 		// if (State == Running) { 
             GetData(); // Acquire voltages
-            EMG=Decode(V1,V2); // Decode
-            Transmit(EMG); // Print value to screen or communication
+            EMG=Decode(DV1,DV2); // Decode
+            Lights();
+            //Transmit(EMG); // Print value to screen or communication
+            
+        // For now, display the two voltage results
+		LCDGoto(0,0);
+		sprintf(str,"%04u",V1);
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        LCDGoto(0,1);
+        sprintf(str,"%04u",V2); 
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        //Display command output
+        LCDGoto(8,1);
+        LCDPutByte(EMG);
+            
             Delay10KTCYx(10);  // Delay 1/10 second
 		// }
 		// if (State == Sleeping){
@@ -68,8 +89,8 @@ void main(void)
 		/*
         // For Communication Testing
 		TXREG1=60; // Set info to be transmitted
-		Delay10KTCYx(50); // Delay 2 seconds        
-		recComm=RCREG1; // Read info received       
+		Delay10KTCYx(50); // Delay 2 secondsÂ Â Â Â Â Â Â  
+		recComm=RCREG1; // Read info receivedÂ Â Â Â Â Â  
 		LCDGoto(0,0);
 		LCDPutByte(recComm);
 		*/
@@ -81,20 +102,18 @@ void SysInit(void)
 {
     OSCCON=0b01010110; //4 MHz internal oscillator
 
-    //Set up buttons
-    ANSELBbits.ANSB0=0; //Digital
-    ANSELCbits.ANSC2=0; //Digital
-    TRISAbits.RA4=1; //Input
-    TRISBbits.RB0=0; //Output
-    TRISCbits.RC2=0; //Output
-
+    //Set up LEDs
+    ANSELB=0b00000000; //Digital IO
+    LATB=0b00000000; //LEDs off
+    TRISB=0b00000000; //LEDs are outputs
+    
     //Set up ADC channel on RA1
     ANSELAbits.ANSA1 = 1;
     TRISAbits.RA1 = 1; //Analog in
 
-    //Set up ADC channel on RA2 
-    ANSELAbits.ANSA2 = 1;
-    TRISAbits.RA2 = 1; //Analog in
+    //Set up ADC channel on RA0 
+    ANSELAbits.ANSA0 = 1;
+    TRISAbits.RA0 = 1; //Analog in
 
     //Set up ADC parameters
     ADCON2bits.ACQT=001; //2 TAD
@@ -114,16 +133,16 @@ void SysInit(void)
     LCDInit(); //Start LCD
     LCDWriteStr("Starting device...");
 
-	//Set up async EUSART    
+	//Set up async EUSARTÂ Â Â  
 	TRISCbits.RC6 = 1; //Initialize TX pin (transmission) 
-	TRISCbits.RC7 = 1; //Initialize RX pin (reception)
-	TXSTA1bits.BRGH=0; //Use low     
-	BAUDCON1bits.BRG16=0; //Use 8-bit transmission 
-	SPBRG1=5;   //Set baud rate to 10417    
-	TXSTA1bits.SYNC=0; //Specify async mode    
-	RCSTA1bits.SPEN=1; //Enable EUSART    
+	TRISCbits.RC7 = 1; //Initialize RX pinÂ (reception)
+	TXSTA1bits.BRGH=0; //Use low Â Â Â  
+	BAUDCON1bits.BRG16=0; //Use 8-bit transmissionÂ 
+	SPBRG1=5;Â Â Â //Set baud rate to 10417 Â Â  
+	TXSTA1bits.SYNC=0; //Specify async modeÂ Â Â  
+	RCSTA1bits.SPEN=1; //Enable EUSARTÂ Â Â  
 	TXSTA1bits.TXEN=1; //Enable transmission
-    ANSELC=0x00;           
+    ANSELC=0x00;  Â Â Â  Â Â Â Â  
 	RCSTA1bits.CREN=1; //Enable receiver
 	
 	//Reset variables
@@ -135,11 +154,11 @@ void SysInit(void)
 	max = 0;
 	recComm = 0;
 	//Set threshold & hysteresis variable
-	PV1=0;
-    PV2=0;
-    oldPV1=0;
-    oldPV2=0;
-    Thresh=512; //Initial threshold
+	DV1=0;
+    DV2=0;
+    oldDV1=0;
+    oldDV2=0;
+    Thresh=300; //Initial threshold
     Hyst=100; //Hysteresis width
 }
 
@@ -154,17 +173,17 @@ void GetData(void) {
     V1=(V1<<8) | ADRESL; //Make 10-bit
     //Process voltage from channel 1
     DV1=DebounceChan(V1,oldDV1);
-    oldPV1=DV1;
+    oldDV1=DV1;
 
     //Channel2
-    ADCON0bits.CHS=0010; //Select RA2
+    ADCON0bits.CHS=0000; //Select RA2
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
     V2=ADRESH;
     V2=(V2<<8) | ADRESL; //Make 10-bit
     //Process voltage from channel 2
     DV2=DebounceChan(V2,oldDV2);
-    oldDV2=PV2;
+    oldDV2=DV2;
 
 }
 
@@ -173,7 +192,7 @@ unsigned int DebounceChan(unsigned int value, unsigned int old){
 // If the level was low before, raise the threshold
 if (old==0){
     //process if voltage is lower or higher than threshold
-    if (value>=Thresh+Hyst){
+    if (value>=Thresh){
         return 1;
     }
     else{
@@ -233,25 +252,21 @@ void SleepMode(void){
 
 //Test functions
 void Lights(void){
-	switch(EMG){
-		//Turn all LEDs off
-		PORTBbits.RB3=0;
-		PORTBbits.RB2=0;
-		PORTBbits.RB1=0;
-		PORTBbits.RB0=0;
+	//Turn all LEDs off
+	LATB=0b00000000; //LEDs off
+    switch(EMG){
 		//Turn on based on EMG
 		case 3:
-		PORTBbits.RB3=1;
+		LATBbits.LATB3=1;
 		break;
 		case 2:
-		PORTBbits.RB2=1;
+		LATBbits.LATB2=1;
 		break;
 		case 1:
-		PORTBbits.RB1=1;
+		LATBbits.LATB1=1;
 		break;
 		case 0:
-		PORTBbits.RB0=1;
+		LATBbits.LATB0=1;
 		break;
 	}
 }
-
