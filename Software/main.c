@@ -21,14 +21,14 @@
 #define Sleeping 1 
 
 //Variable definitions
-unsigned int V1; // signal from lead 1
-unsigned int V2; // signal from lead 2
-unsigned int oldV1; // old signal from lead 1
-unsigned int oldV2; // old signal from lead 2
-unsigned int DV1; // debounced signal from lead 1
-unsigned int DV2; // debounced signal from lead 2
-unsigned int oldDV1; // old debounced signal from lead 1
-unsigned int oldDV2; // old debounced signal from lead 2
+int V1; // signal from lead 1
+int V2; // signal from lead 2
+int oldV1; // old signal from lead 1
+int oldV2; // old signal from lead 2
+int DV1; // debounced signal from lead 1
+int DV2; // debounced signal from lead 2
+int oldDV1; // old debounced signal from lead 1
+int oldDV2; // old debounced signal from lead 2
 int Thresh; // threshold for voltage classification
 int Hyst; // hysteresis range
 int EMG; // decoded result
@@ -41,8 +41,8 @@ int t;
 //Function definitions
 void SysInit(void);
 void GetData(void);
-unsigned int DebounceChan(unsigned int value, unsigned int old);
-int Decode(unsigned int voltage1, unsigned int voltage2);
+ int DebounceChan( int raw,  int oldraw,  int olddeb);
+int Decode(int voltage1, int voltage2);
 void Transmit(int info);
 void SleepMode(void);
 //Test functions
@@ -161,9 +161,9 @@ void SysInit(void)
     DV2=0;
     oldDV1=0;
     oldDV2=0;
-    Thresh=300; //Initial threshold
+    Thresh=500; //Initial threshold
     Hyst=100; //Hysteresis width
-	t= 5 ; // 50 ms (1 corresponds to 10 ms)
+	t= 20 ; // 50 ms (1 corresponds to 10 ms)
 }
 
 // ADC sampling of EMG leads
@@ -180,6 +180,7 @@ void GetData(void) {
 	oldV1 = V1;
     oldDV1=DV1;
 	
+    /*
     //Channel2
     ADCON0bits.CHS=0000; //Select RA2
 	ADCON0bits.GO=1; //Start conversion
@@ -190,21 +191,22 @@ void GetData(void) {
     DV2=DebounceChan(V2,oldV2,oldDV2);
 	oldV2 = V2;
     oldDV2=DV2;
-
+*/
 
 }
 
 //Hysteresis for each channel
-unsigned int DebounceChan(unsigned int raw, unsigned int oldraw, unsigned int olddeb){
+int DebounceChan(int raw, int oldraw, int olddeb){
 	float slope;
-	float slopeThres;
+	float slopeThresh;
 	// Find instantaneous slope
-	slope = (raw-oldraw)/(t*10); // units: unit/ms
+	slope = (raw-oldraw)/(t*10.0); // units: unit/ms
+    
 	// Threshold is 15 V/s * 1023 units/5V = 3069 units/sec = 3.069 units/ms
-	slopeThres = 3.069;
+	slopeThresh = 3.069;
 	// If the level was low before, raise the threshold
 	if (olddeb==0){
-		if ((slope>slopeThres) || (raw>Thresh)){
+		if ((slope>slopeThresh) || (raw>Thresh)){
 			return 1;
 		}
 		else{
@@ -213,18 +215,19 @@ unsigned int DebounceChan(unsigned int raw, unsigned int oldraw, unsigned int ol
 	}
 // If the level was high before, lower the threshold
     if (olddeb==1){
-		if((slope<-1*slopeThres) || (slope<0 && raw<Thres){
-        return 0;
-    }
-    else{
-        return 1;
+		if((slope<0 && raw<Thresh)){
+            //(slope<-1*slopeThresh) || (slope<0 && raw<Thresh)
+            return 0;
+        }
+        else{
+            return 1;
+        }
     }
 }
 
 
-
 // Decode the two digital signals
-int Decode(unsigned int voltage1, unsigned int voltage2){
+int Decode(int voltage1, int voltage2){
 	//Decode based on binary inputs
 	if (voltage1==1){
         if(voltage2==1){
