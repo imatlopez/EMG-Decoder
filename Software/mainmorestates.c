@@ -37,7 +37,6 @@ int max;
 int min;
 int recComm; // received signal via communication
 int t;
-
 //Function definitions
 void SysInit(void);
 void GetData(void);
@@ -62,10 +61,21 @@ void main(void)
         // For EMG decoding
 		// if (State == Running) { 
             GetData(); // Acquire voltages
-            EMG=Decode(DV1,DV2); // Decode
-            Lights();
-            //Transmit(EMG); // Print value to screen or communication
-            
+			if(DV1==1 || DV2==1){
+				Delay10KTCYx(100);  // Delay 1 second
+				GetData();
+				EMG=Decode(DV1,DV2); // Decode
+				//Lights();
+				Transmit(EMG); // Print value to screen or communication
+				oldV1=0;
+				oldDV1=0;
+				oldV2=0;
+				oldDV2=0;
+				
+			}
+
+        
+			/*
         // For now, display the two voltage results
 		LCDGoto(0,0);
 		sprintf(str,"%04u",V1);
@@ -82,7 +92,7 @@ void main(void)
         //Display command output
         LCDGoto(8,1);
         LCDPutByte(EMG);
-            
+            */
             Delay10KTCYx(t);  // Delay 1/10 second
 		// }
 		// if (State == Sleeping){
@@ -213,8 +223,8 @@ unsigned int DebounceChan(unsigned int raw, unsigned int oldraw, unsigned int ol
 	}
 // If the level was high before, lower the threshold
     if (olddeb==1){
-		if((slope<-1*slopeThres) || (slope<0 && raw<Thres){
-        return 0;
+		if(raw>Thres){
+        return 2;
     }
     else{
         return 1;
@@ -222,25 +232,46 @@ unsigned int DebounceChan(unsigned int raw, unsigned int oldraw, unsigned int ol
 }
 
 
-
 // Decode the two digital signals
 int Decode(unsigned int voltage1, unsigned int voltage2){
 	//Decode based on binary inputs
-	if (voltage1==1){
-        if(voltage2==1){
-            return 3; //11
-        }
-        else {
-            return 2; //10
-        }
-    }
-    else {
-        if(voltage2==1){
-            return 1; //01
-        }
-        else {
-            return 0; //00
-        }
+	if (voltage1==0){
+		switch(voltage2){
+			case 0:
+				return 0;
+				break;
+			case 1:
+				return 1;
+				break;
+			case 2:
+				return 2;
+				break;
+		}
+		if (voltage1==1){
+		switch(voltage2){
+			case 0:
+				return 3;
+				break;
+			case 1:
+				return 4;
+				break;
+			case 2:
+				return 5;
+				break;
+		}
+		if (voltage1==2){
+		switch(voltage2){
+			case 0:
+				return 6;
+				break;
+			case 1:
+				return 7;
+				break;
+			case 2:
+				return 8;
+				break;
+		}		
+       
     }
 }
 
@@ -251,7 +282,6 @@ void Transmit(int info){
     LCDGoto(0,0);
     LCDPutByte(EMG);
     
-    State++;
 }
 
 void SleepMode(void){
