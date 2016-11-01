@@ -191,7 +191,7 @@ OutputEnabled9_OutputMedium3=2
 OutputEnabled9_OutputMedium4=0
 OutputDefault9=0
 Configuration9_Name1=OutputConfigurationParameter1
-Configuration9_Item1=Record=ExportDXFView|ACadVersion=60|UseRoundedTracks=True|Components=1|HoleMode=2|Units=0|OutputFormat=0|OnlyVisibleLayers=False|ZeroWidthLines=0
+Configuration9_Item1=Record=ExportDXFView|ACadVersion=60|UseRoundedTracks=True|Components=0|HoleMode=2|Units=0|OutputFormat=0|OnlyVisibleLayers=False|ZeroWidthLines=0
 OutputType10=ExportSTEP
 OutputName10=Export STEP
 OutputCategory10=Export
