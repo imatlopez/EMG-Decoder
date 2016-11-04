@@ -1,7 +1,10 @@
 Protel Design System Design Rule Check
 PCB File : \\Mac\Home\Desktop\Duke\BME464\Electronics\PowerTest\PCB.PcbDoc
-Date     : 10/24/16
-Time     : 10:39:10 PM
+Date     : 11/3/16
+Time     : 2:09:39 PM
+
+Processing Rule : SMD Neck-Down Constraint (Percent=120%) (All)
+Rule Violations :0
 
 Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
 Rule Violations :0
@@ -9,7 +12,7 @@ Rule Violations :0
 Processing Rule : Un-Routed Net Constraint ( (All) )
 Rule Violations :0
 
-Processing Rule : Clearance Constraint (Gap=5mil) (All),(All)
+Processing Rule : Clearance Constraint (Gap=10mil) (All),(All)
 Rule Violations :0
 
 Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=20mil) (Conductor Width=20mil) (Air Gap=20mil) (Entries=4) (All)
