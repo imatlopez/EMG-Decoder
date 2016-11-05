@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: Main.GBR   11/3/16  11:03:46 PM
+Gerber File Extension Report For: Main.GBR   11/5/16  4:46:40 PM
 ------------------------------------------------------------------------------------------
 
 
@@ -14,7 +14,7 @@ Layer Extension     Layer Description
 .gbr                Top Solder                              
 .gbr                Bottom Paste                            
 .gbr                Bottom Overlay                          
-.gbr                Bottom Solder                           
+.gbr                Solder Side                             
 .gbr                Top Paste                               
 .gbr                Profile                                 
 ------------------------------------------------------------------------------------------
