@@ -1,18 +1,12 @@
 Protel Design System Design Rule Check
 PCB File : \\Mac\Home\Desktop\Duke\BME464\Electronics\Main.PcbDoc
-Date     : 11/5/16
-Time     : 4:43:04 PM
+Date     : 11/7/16
+Time     : 12:51:46 PM
 
-Processing Rule : Room Neg (Bounding Region = (2155mil, 1198.071mil, 2735mil, 1568.071mil) (InComponentClass('Neg'))
+Processing Rule : Room Filtering1 (Bounding Region = (995mil, 1235mil, 2765mil, 1825mil) (InComponentClass('Filtering1'))
 Rule Violations :0
 
-Processing Rule : Room Pos (Bounding Region = (1505mil, 1071.85mil, 1945mil, 1441.85mil) (InComponentClass('Pos'))
-Rule Violations :0
-
-Processing Rule : Room Filtering2 (Bounding Region = (1034mil, 2141.409mil, 2799mil, 2806.409mil) (InComponentClass('Filtering2'))
-Rule Violations :0
-
-Processing Rule : Room Filtering1 (Bounding Region = (1027.15mil, 1238mil, 2792.15mil, 1903mil) (InComponentClass('Filtering1'))
+Processing Rule : Room Filtering2 (Bounding Region = (993.89mil, 2101mil, 2763.89mil, 2691mil) (InComponentClass('Filtering2'))
 Rule Violations :0
 
 Processing Rule : SMD Neck-Down Constraint (Percent=100%) (All)
@@ -57,24 +51,27 @@ Rule Violations :0
 Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
 Rule Violations :0
 
-Processing Rule : Room Digital (Bounding Region = (1655mil, 1510mil, 2300mil, 2150mil) (InComponentClass('Digital'))
+Processing Rule : Room Digital (Bounding Region = (1604.121mil, 1610.879mil, 2374.121mil, 2380.879mil) (InComponentClass('Digital'))
 Rule Violations :0
 
-Processing Rule : Room Drive1 (Bounding Region = (2050mil, 2200mil, 2555mil, 2550mil) (InComponentClass('Drive1'))
+Processing Rule : Room Drive (Bounding Region = (1748.15mil, 2360mil, 2253.15mil, 2769mil) (InComponentClass('Drive'))
 Rule Violations :0
 
-Processing Rule : Room Drive2 (Bounding Region = (1445mil, 2200mil, 1950mil, 2550mil) (InComponentClass('Drive2'))
+Processing Rule : Room Input1 (Bounding Region = (2310mil, 2416.85mil, 2630mil, 2901.85mil) (InComponentClass('Input1'))
 Rule Violations :0
 
-Processing Rule : Room Input1 (Bounding Region = (2250mil, 2600mil, 2730mil, 2993.15mil) (InComponentClass('Input1'))
+Processing Rule : Room Input2 (Bounding Region = (1370mil, 2425mil, 1690mil, 2910mil) (InComponentClass('Input2'))
 Rule Violations :0
 
-Processing Rule : Room Input2 (Bounding Region = (1270mil, 2600mil, 1750mil, 2993.15mil) (InComponentClass('Input2'))
+Processing Rule : Room Main (Bounding Region = (3030mil, 2094mil, 3070mil, 2812mil) (InComponentClass('Main'))
 Rule Violations :0
 
-Processing Rule : Room Main (Bounding Region = (3000mil, 1715mil, 3050mil, 2435mil) (InComponentClass('Main'))
+Processing Rule : Room Neg (Bounding Region = (1410mil, 1225mil, 1945mil, 1570mil) (InComponentClass('Neg'))
+Rule Violations :0
+
+Processing Rule : Room Pos (Bounding Region = (1071.614mil, 1302.323mil, 1331.614mil, 1762.323mil) (InComponentClass('Pos'))
 Rule Violations :0
 
 
 Violations Detected : 0
-Time Elapsed        : 00:00:02
+Time Elapsed        : 00:00:01
