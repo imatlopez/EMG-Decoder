@@ -17,22 +17,22 @@
 #pragma config XINST = OFF      // Instruction set Extension and indexed Addressing mode disabled
 
 //Define statements
-#define Running 0
-#define Sleeping 1 
+// #define Running 0
+// #define Sleeping 1 
 
 //Variable definitions
-int V1; // signal from lead 1
-int V2; // signal from lead 2
-int oldV1; // old signal from lead 1
-int oldV2; // old signal from lead 2
-int DV1; // debounced signal from lead 1
-int DV2; // debounced signal from lead 2
-int oldDV1; // old debounced signal from lead 1
-int oldDV2; // old debounced signal from lead 2
-int Thresh; // threshold for voltage classification
-int Hyst; // hysteresis range
+int rawV1; // raw signal from lead 1
+int rawV2; // raw signal from lead 2
+int oldRawV1; // old raw signal from lead 1
+int oldRawV2; // old raw signal from lead 2
+int V1; // processed signal from lead 1
+int V2; // processed signal from lead 2
+int oldV1; // old processed signal from lead 1
+int oldV2; // old processed signal from lead 2
+int thres; // threshold for voltage classification
+int hyst; // hysteresis range
 int EMG; // decoded result
-int State;
+int state;
 int max;
 int min;
 int recComm; // received signal via communication
@@ -41,8 +41,8 @@ int t;
 //Function definitions
 void SysInit(void);
 void GetData(void);
- int DebounceChan( int raw,  int oldraw,  int olddeb);
-int Decode(int voltage1, int voltage2);
+int Debounce(int raw,int oldraw, int olddeb);
+int Decode(int channel1, int voltage2);
 void Transmit(int info);
 void SleepMode(void);
 //Test functions
