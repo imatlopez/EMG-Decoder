@@ -21,74 +21,52 @@
 // #define Sleeping 1 
 
 //Variable definitions
-int rawV1; // raw signal from lead 1
-int rawV2; // raw signal from lead 2
 int oldRawV1; // old raw signal from lead 1
 int oldRawV2; // old raw signal from lead 2
-int V1; // processed signal from lead 1
-int V2; // processed signal from lead 2
 int oldV1; // old processed signal from lead 1
 int oldV2; // old processed signal from lead 2
 int thres; // threshold for voltage classification
 int hyst; // hysteresis range
-int EMG; // decoded result
 int state;
 int max;
 int min;
 int recComm; // received signal via communication
-int t;
+int t; // sampling period (x10^-2 seconds)
 
 //Function definitions
 void SysInit(void);
-void GetData(void);
-int Debounce(int raw,int oldraw, int olddeb);
-int Decode(int channel1, int voltage2);
+int GetData(int channel);
+int Debounce(int raw, int oldraw, int olddeb);
+int Decode(int channel1, int channel2);
 void Transmit(int info);
 void SleepMode(void);
-//Test functions
-void Lights(void);
 
 void main(void)
 {
      // Local variables
-    char str[4];
+	int rawV1; // raw signal from lead 1
+	int rawV2; // raw signal from lead 2
+	int V1; // processed signal from lead 1
+	int V2; // processed signal from lead 2
+	int EMG; // decoded result
+
     //Initialize
     SysInit();
     LCDClear();
 
     // EMG Decoder Loop
     while(1) {
-        
-        // For EMG decoding
-		// if (State == Running) { 
-            GetData(); // Acquire voltages
-            EMG=Decode(DV1,DV2); // Decode
-            Lights();
-            //Transmit(EMG); // Print value to screen or communication
-            
-        // For now, display the two voltage results
-		LCDGoto(0,0);
-		sprintf(str,"%04u",V1);
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-        LCDGoto(0,1);
-        sprintf(str,"%04u",V2); 
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-        //Display command output
-        LCDGoto(8,1);
-        LCDPutByte(EMG);
-            
-            Delay10KTCYx(t);  // Delay 1/10 second
-		// }
-		// if (State == Sleeping){
-           // SleepMode();      
-		// }
-         
+		rawV1 = GetData(1); // Acquire voltage from channel 1
+		rawV2 = GetData(2); // Acquire voltage from channel 2
+		V1=Debounce(rawV1, oldRawV1,oldV1); //Process voltage from channel 1
+		oldRawV1 = rawV1;
+		oldV1=V1;
+		V2=Debounce(rawV2,oldRawV2,oldV2); //Process voltage from channel 2
+		oldRawV2 = rawV2;
+		oldV2=V2;
+		EMG=Decode(V1,V2); // Decode
+        Transmit(EMG); // Print value to screen or communication
+		Delay10KTCYx(t);  // Delay t/100 seconds
 		/*
         // For Communication Testing
 		TXREG1=60; // Set info to be transmitted
@@ -105,17 +83,12 @@ void SysInit(void)
 {
     OSCCON=0b01010110; //4 MHz internal oscillator
 
-    //Set up LEDs
-    ANSELB=0b00000000; //Digital IO
-    LATB=0b00000000; //LEDs off
-    TRISB=0b00000000; //LEDs are outputs
-    
-    //Set up ADC channel on RA1
-    ANSELAbits.ANSA1 = 1;
+    //Set up ADC channel on RA0
+    ANSELAbits.ANSA0 = 1;
     TRISAbits.RA1 = 1; //Analog in
 
-    //Set up ADC channel on RA0 
-    ANSELAbits.ANSA0 = 1;
+    //Set up ADC channel on RA1 
+    ANSELAbits.ANSA1 = 1;
     TRISAbits.RA0 = 1; //Analog in
 
     //Set up ADC parameters
@@ -125,7 +98,7 @@ void SysInit(void)
     ADCON0bits.ADON=1; //Turn on A/D
 
 	//Set up sleep mode
-	OSCCONbits.IDLEN = 0;
+	// OSCCONbits.IDLEN = 0;
 
 	//Set up Watchdog Timer
 	// WDTCONbits.SWDTEN = 1; // Turn on WDT
@@ -149,74 +122,62 @@ void SysInit(void)
 	RCSTA1bits.CREN=1; //Enable receiver
 	
 	//Reset variables
-	V1=0;
-	V2=0;
-	EMG=0;
-	State=0;
-	min = 0;
-	max = 0;
-	recComm = 0;
-	//Set threshold & hysteresis variable
-	DV1=0;
-    DV2=0;
-    oldDV1=0;
-    oldDV2=0;
-    Thresh=500; //Initial threshold
-    Hyst=100; //Hysteresis width
-	t= 20 ; // 50 ms (1 corresponds to 10 ms)
+	oldRawV1=0;
+	oldRawV2=0;
+	oldV1=0;
+	oldV2=0;
+	state=0;
+	min=0;
+	max=0;
+
+	//Configure variables (adjustable)
+    thres=500; //Initial threshold
+    // hyst=100; //Hysteresis width
+	t=20; //200 ms (1 corresponds to 10 ms)
 }
 
 // ADC sampling of EMG leads
-void GetData(void) {
-	
-	//Channel1
-	ADCON0bits.CHS=0001; //Select RA1
-	ADCON0bits.GO=1; //Start conversion
-    while(ADCON0bits.GO==1){}; //Wait for finish
-    V1=ADRESH;
-    V1=(V1<<8) | ADRESL; //Make 10-bit
-    //Process voltage from channel 1
-    DV1=DebounceChan(V1,oldV1,oldDV1);
-	oldV1 = V1;
-    oldDV1=DV1;
-	
-    /*
-    //Channel2
-    ADCON0bits.CHS=0000; //Select RA2
-	ADCON0bits.GO=1; //Start conversion
-    while(ADCON0bits.GO==1){}; //Wait for finish
-    V2=ADRESH;
-    V2=(V2<<8) | ADRESL; //Make 10-bit
-    //Process voltage from channel 2
-    DV2=DebounceChan(V2,oldV2,oldDV2);
-	oldV2 = V2;
-    oldDV2=DV2;
-*/
-
+int GetData(int channel) {
+	int volt;
+	if(channel==1){
+		//Channel 1
+		ADCON0bits.CHS=0000; //Select RA0
+		ADCON0bits.GO=1; //Start conversion
+		while(ADCON0bits.GO==1){}; //Wait for finish
+		volt=ADRESH;
+		volt=(volt<<8) | ADRESL; //Make 10-bit
+	}
+	if(channel==2){
+		//Channel2
+		ADCON0bits.CHS=0001; //Select RA1
+		ADCON0bits.GO=1; //Start conversion
+		while(ADCON0bits.GO==1){}; //Wait for finish
+		volt=ADRESH;
+		volt=(volt<<8) | ADRESL; //Make 10-bit
+	}
+	return volt;
 }
 
-//Hysteresis for each channel
-int DebounceChan(int raw, int oldraw, int olddeb){
+// Process signal from each channel into either high or low
+int Debounce(int raw, int oldraw, int olddeb){
 	float slope;
-	float slopeThresh;
+	float slopeThres;
 	// Find instantaneous slope
-	slope = (raw-oldraw)/(t*10.0); // units: unit/ms
-    
+	slope = (raw-oldraw)/(t*10.0); // unit: voltage units/ms
 	// Threshold is 15 V/s * 1023 units/5V = 3069 units/sec = 3.069 units/ms
-	slopeThresh = 3.069;
-	// If the level was low before, raise the threshold
+	slopeThres = 3.069;
+	// If the signal was low before:
 	if (olddeb==0){
-		if ((slope>slopeThresh) || (raw>Thresh)){
+		if ((slope>slopeThres) || (raw>Thres)){
 			return 1;
 		}
 		else{
 			return 0;
 		}
 	}
-// If the level was high before, lower the threshold
+	// If the level was high before:
     if (olddeb==1){
-		if((slope<0 && raw<Thresh)){
-            //(slope<-1*slopeThresh) || (slope<0 && raw<Thresh)
+		if((slope<0 && raw<Thresh)){ //(slope<-1*slopeThresh) || (slope<0 && raw<Thresh)
             return 0;
         }
         else{
@@ -225,12 +186,10 @@ int DebounceChan(int raw, int oldraw, int olddeb){
     }
 }
 
-
 // Decode the two digital signals
-int Decode(int voltage1, int voltage2){
-	//Decode based on binary inputs
-	if (voltage1==1){
-        if(voltage2==1){
+int Decode(int channel1, int channel2){
+	if (channel1==1){
+        if(channel2==1){
             return 3; //11
         }
         else {
@@ -238,7 +197,7 @@ int Decode(int voltage1, int voltage2){
         }
     }
     else {
-        if(voltage2==1){
+        if(channel2==1){
             return 1; //01
         }
         else {
@@ -249,12 +208,11 @@ int Decode(int voltage1, int voltage2){
 
 // Transmit the result to external interface
 void Transmit(int info){
-    // For now, display EMG
-    LCDClear();
-    LCDGoto(0,0);
-    LCDPutByte(EMG);
-    
-    State++;
+    // Display EMG
+	LCDGoto(8,1);
+	LCDPutByte(info);
+	// Transmit EMG
+	TXREG1 = info;
 }
 
 void SleepMode(void){
@@ -262,25 +220,4 @@ void SleepMode(void){
     LCDWriteStr("SLEEP MODE");
     Sleep();
     State = 0;  
-}
-
-//Test functions
-void Lights(void){
-	//Turn all LEDs off
-	LATB=0b00000000; //LEDs off
-    switch(EMG){
-		//Turn on based on EMG
-		case 3:
-		LATBbits.LATB3=1;
-		break;
-		case 2:
-		LATBbits.LATB2=1;
-		break;
-		case 1:
-		LATBbits.LATB1=1;
-		break;
-		case 0:
-		LATBbits.LATB0=1;
-		break;
-	}
 }
