@@ -49,8 +49,7 @@ void Lights(void);
 
 void main(void)
 {
-     // Local variables
-    char str[4];
+
     //Initialize
     SysInit();
     LCDClear();
@@ -67,43 +66,22 @@ void main(void)
 				EMG=Decode(DV1,DV2); // Decode
 				//Lights();
 				Transmit(EMG); // Print value to screen or communication
+				Delay10KTCYx(200);  // Delay for period of robot movement (2 seconds)
+				//Reset variables
 				oldV1=0;
 				oldDV1=0;
 				oldV2=0;
 				oldDV2=0;
-				
+				V1=0;
+				V2=0;
+				DV1=0;
+				DV2=0;
+				EMG=0;
+				Transmit(EMG);
 			}
-
-        
-			
-        // For now, display the two voltage results
-            EMG=Decode(DV1,DV2);
-		LCDGoto(0,0);
-		sprintf(str,"%04u",V1);
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-        LCDGoto(0,1);
-        sprintf(str,"%04u",V2); 
-        LCDPutChar(str[0]);
-        LCDPutChar(str[1]);
-        LCDPutChar(str[2]);
-        LCDPutChar(str[3]);
-                LCDGoto(6,0);
-        LCDPutByte(DV1);
-                LCDGoto(6,1);
-        LCDPutByte(DV2);
-        //Display command output
-        LCDGoto(9,1);
-        LCDPutByte(EMG);
          
-            Delay10KTCYx(t);  // Delay 1/10 second
-		// }
-		// if (State == Sleeping){
-           // SleepMode();      
-		// }
-         
+            Delay10KTCYx(t);  // Delay 1/10 second --> this is sampling period
+ 
 		/*
         // For Communication Testing
 		TXREG1=60; // Set info to be transmitted
@@ -119,11 +97,6 @@ void main(void)
 void SysInit(void)
 {
     OSCCON=0b01010110; //4 MHz internal oscillator
-
-    //Set up LEDs
-    ANSELB=0b00000000; //Digital IO
-    LATB=0b00000000; //LEDs off
-    TRISB=0b00000000; //LEDs are outputs
     
     //Set up ADC channel on RA1
     ANSELAbits.ANSA1 = 1;
@@ -162,7 +135,7 @@ void SysInit(void)
 	TXSTA1bits.TXEN=1; //Enable transmission
     ANSELC=0x00;           
 	RCSTA1bits.CREN=1; //Enable receiver
-	
+
 	//Reset variables
 	V1=0;
 	V2=0;
@@ -285,7 +258,31 @@ int Decode( int voltage1,  int voltage2){
 // Transmit the result to external interface
 void Transmit(int info){
     // For now, display EMG
-    
+    	// Local variables
+    	char str[4];
+    	//Raw value for Ch1
+    	LCDGoto(0,0);
+		sprintf(str,"%04u",V1);
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        //Raw value for Ch1
+        LCDGoto(0,1);
+        sprintf(str,"%04u",V2); 
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        //Debounced value for Ch1
+        LCDGoto(6,0);
+        LCDPutByte(DV1);
+        //Debounced value for Ch2
+        LCDGoto(6,1);
+        LCDPutByte(DV2);
+        //Display command output
+        LCDGoto(9,1);
+        LCDPutByte(EMG);
 }
 
 void SleepMode(void){
