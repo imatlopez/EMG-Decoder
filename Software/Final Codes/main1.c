@@ -25,11 +25,14 @@ int oldRawV1; // old raw signal from lead 1
 int oldRawV2; // old raw signal from lead 2
 int oldV1; // old processed signal from lead 1
 int oldV2; // old processed signal from lead 2
-int thres; // threshold for voltage classification
+int thres1; // threshold for voltage classification
+int thres2; // threshold for voltage classification
 int hyst; // hysteresis range
 int state;
-int max;
-int min;
+int max1;
+int min1;
+int max2;
+int min2;
 int recComm; // received signal via communication
 int t; // sampling period (x10^-2 seconds)
 
@@ -39,7 +42,7 @@ int GetData(int channel);
 int Debounce(int raw, int oldraw, int olddeb);
 int Decode(int channel1, int channel2);
 void Transmit(int info);
-void SleepMode(void);
+void Calibrate(void);
 
 void main(void)
 {
@@ -49,19 +52,21 @@ void main(void)
 	int V1; // processed signal from lead 1
 	int V2; // processed signal from lead 2
 	int EMG; // decoded result
+	int count
 
     //Initialize
     SysInit();
     LCDClear();
+    Calibrate();
 
     // EMG Decoder Loop
     while(1) {
 		rawV1 = GetData(1); // Acquire voltage from channel 1
 		rawV2 = GetData(2); // Acquire voltage from channel 2
-		V1=Debounce(rawV1, oldRawV1,oldV1); //Process voltage from channel 1
+		V1=Debounce(rawV1, oldRawV1,oldV1,1); //Process voltage from channel 1
 		oldRawV1 = rawV1;
 		oldV1=V1;
-		V2=Debounce(rawV2,oldRawV2,oldV2); //Process voltage from channel 2
+		V2=Debounce(rawV2,oldRawV2,oldV2,2); //Process voltage from channel 2
 		oldRawV2 = rawV2;
 		oldV2=V2;
 		EMG=Decode(V1,V2); // Decode
@@ -127,13 +132,52 @@ void SysInit(void)
 	oldV1=0;
 	oldV2=0;
 	state=0;
-	min=0;
-	max=0;
+	thres1=0;
+	thres2=0;
 
 	//Configure variables (adjustable)
-    thres=300; //Initial threshold
+    //thres=300; //Initial threshold
     // hyst=100; //Hysteresis width
 	t=20; //200 ms (1 corresponds to 10 ms)
+}
+
+void Calibrate(void){
+	int count
+	int ca1
+	int ca2
+    //Calibration period
+    // Display EMG
+	LCDGoto(3,0);
+	LCDPutByte(0);
+    Delay1000KTCYx(10); //Wait 10 seconds for system to settle
+    max1=0;
+    min1=1023;
+    max2=0;
+    min2=1023;
+    // Display EMG
+	LCDGoto(3,0);
+	LCDPutByte(8);
+    for(count=0;count<200;count++){ //Calibrate for 10 seconds
+    	//Ch1
+    	ca1=GetData(1); // Acquire voltage from channel 1
+    	if(ca1>max1){
+    		max1=ca1;
+    	}
+    	if(ca1<max1){
+    		min1=ca1;
+    	}
+    	//Ch2
+		ca2=GetData(2); // Acquire voltage from channel 2
+    	if(ca2>max2){
+    		max2=ca2;
+    	}
+    	if(ca2<max2){
+    		min2=ca2;
+    	}
+    }
+    //need to figure this out
+    thres1=min1+(max1-min1)*3/10;
+    thres2=min2+(max2+min2)*3/10;
 }
 
 // ADC sampling of EMG leads
@@ -159,9 +203,17 @@ int GetData(int channel) {
 }
 
 // Process signal from each channel into either high or low
-int Debounce(int raw, int oldraw, int olddeb){
+int Debounce(int raw, int oldraw, int olddeb, int channel){
 	float slope;
 	float slopeThres;
+	//Set threshold
+	if(channel=1){
+		thres=thres1
+	}
+	if(channel=2){
+		thres=thres2
+	}
+
 	// Find instantaneous slope
 	slope = (raw-oldraw)/(t*10.0); // unit: voltage units/ms
 	// Threshold is 15 V/s * 1023 units/5V = 3069 units/sec = 3.069 units/ms
@@ -215,8 +267,3 @@ void Transmit(int info){
 	TXREG1 = info;
 }
 
-void SleepMode(void){
-    LCDClear();
-    LCDWriteStr("SLEEP MODE");
-    Sleep();
-}

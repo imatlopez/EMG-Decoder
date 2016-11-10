@@ -21,18 +21,14 @@
 #define Sleeping 1 
 
 //Variable definitions
- int V1; // signal from lead 1
- int V2; // signal from lead 2
- int oldV1; // old signal from lead 1
- int oldV2; // old signal from lead 2
- int DV1; // debounced signal from lead 1
- int DV2; // debounced signal from lead 2
- int oldDV1; // old debounced signal from lead 1
- int oldDV2; // old debounced signal from lead 2
+int V1; // signal from lead 1
+int V2; // signal from lead 2
+int oldV1; // old signal from lead 1
+int oldV2; // old signal from lead 2
+int active; //Is there activity?
 int Thresh; // threshold for voltage classification
 int Hyst; // hysteresis range
 int EMG; // decoded result
-int State;
 int max;
 int min;
 int recComm; // received signal via communication
@@ -40,12 +36,13 @@ int t;
 //Function definitions
 void SysInit(void);
 void GetData(void);
- int DebounceChan( int raw,  int oldraw,  int olddeb);
+int Detect( int raw,  int oldraw,  int olddeb);
 int Decode( int voltage1,  int voltage2);
 void Transmit(int info);
 void SleepMode(void);
 //Test functions
 void Lights(void);
+void Reset(void);
 
 void main(void)
 {
@@ -57,26 +54,13 @@ void main(void)
     // EMG Decoder Loop
     while(1) {
         
-        // For EMG decoding
-		// if (State == Running) { 
-            GetData(); // Acquire voltages
-			if(DV1==1 || DV2==1){
-				Delay10KTCYx(100);  // Delay 1 second
-				GetData();
-				EMG=Decode(DV1,DV2); // Decode
-				//Lights();
+            active=Detect();// Check if there's any input
+			if(active==1){
+				Reset();
+				EMG=Decode(); // Decode
 				Transmit(EMG); // Print value to screen or communication
 				Delay10KTCYx(200);  // Delay for period of robot movement (2 seconds)
-				//Reset variables
-				oldV1=0;
-				oldDV1=0;
-				oldV2=0;
-				oldDV2=0;
-				V1=0;
-				V2=0;
-				DV1=0;
-				DV2=0;
-				EMG=0;
+				Reset(); //Reset variables
 				Transmit(EMG);
 			}
          
@@ -156,17 +140,16 @@ void SysInit(void)
 
 // ADC sampling of EMG leads
 void GetData(void) {
-	
+	//Save old values
+	oldV1=V1;
+	oldV2=V2;
+
 	//Channel1
 	ADCON0bits.CHS=0001; //Select RA1
 	ADCON0bits.GO=1; //Start conversion
     while(ADCON0bits.GO==1){}; //Wait for finish
     V1=ADRESH;
     V1=(V1<<8) | ADRESL; //Make 10-bit
-    //Process voltage from channel 1
-    DV1=DebounceChan(V1,oldV1,oldDV1);
-	oldV1 = V1;https://github.com/imatlopez/EMG-Decoder
-    oldDV1=DV1;
 	
     //Channel2
     ADCON0bits.CHS=0000; //Select RA2
@@ -174,91 +157,8 @@ void GetData(void) {
     while(ADCON0bits.GO==1){}; //Wait for finish
     V2=ADRESH;
     V2=(V2<<8) | ADRESL; //Make 10-bit
-    //Process voltage from channel 2
-    DV2=DebounceChan(V2,oldV2,oldDV2);
-	oldV2 = V2;
-    oldDV2=DV2;
 
-
-}
-
-//Hysteresis for each channel
- int DebounceChan( int raw,  int oldraw,  int olddeb){
-	float slope;
-	float slopeThres;
-	// Find instantaneous slope
-	slope = (raw-oldraw)/(t*10); // units: unit/ms
-	// Threshold is 15 V/s * 1023 units/5V = 3069 units/sec = 3.069 units/ms
-	slopeThres = 3.069;
-	// If the level was low before, raise the threshold
-	if (olddeb==0){
-		if ((slope>slopeThres) || (raw>Thresh)){
-			return 1;
-		}
-		else{
-			return 0;
-		}
-	}
-// If the level was high before, lower the threshold
-    if (olddeb==1){
-		if(raw>Thresh){
-        return 2;
-    }
-    else{
-        return 1;
-    }
-}
- }
-
-// Decode the two digital signals
-int Decode( int voltage1,  int voltage2){
-	//Decode based on binary inputs
-	if (voltage1==0){
-		switch(voltage2){
-			case 0:
-				return 0;
-				break;
-			case 1:
-				return 1;
-				break;
-			case 2:
-				return 2;
-				break;
-		}
-    }
-		if (voltage1==1){
-		switch(voltage2){
-			case 0:
-				return 3;
-				break;
-			case 1:
-				return 4;
-				break;
-			case 2:
-				return 5;
-				break;
-		}
-        }
-		if (voltage1==2){
-		switch(voltage2){
-			case 0:
-				return 6;
-				break;
-			case 1:
-				return 7;
-				break;
-			case 2:
-				return 8;
-				break;
-		}		
-       
-    }
-}
- 
-// Transmit the result to external interface
-void Transmit(int info){
-    // For now, display EMG
-    	// Local variables
+    //Display raw values
     	char str[4];
     	//Raw value for Ch1
     	LCDGoto(0,0);
@@ -274,22 +174,87 @@ void Transmit(int info){
         LCDPutChar(str[1]);
         LCDPutChar(str[2]);
         LCDPutChar(str[3]);
+}
+
+//Hysteresis for each channel
+int Detect(void){
+	float slope1;
+	float slope2;
+	float slopeThres;
+	// Sample data
+	GetData();
+
+	//For Ch1
+	// Find instantaneous slope
+	slope1 = (V1-oldV1)/(t*10); // units: unit/ms
+	slope2 = (V2-oldV2)/(t*10); // units: unit/ms
+	// Threshold is 15 V/s * 1023 units/5V = 3069 units/sec = 3.069 units/ms
+	slopeThres = 3.069;
+	if ((slope1>slopeThres) || (V1>Thresh)){
+		return 1;
+	}
+	else{
+		if ((slope2>slopeThres) || (V2>Thresh)){
+			return 1;
+		}
+		else{
+			return 0;
+		}
+	}
+}
+
+
+// Check against amplitude threshold
+int Check(int raw){
+	if(raw>Thresh){
+        return 1;
+    }
+    else{
+        return 0;
+	}
+}
+
+
+// Decode the two digital signals
+int Decode(void){
+	int result
+	Delay10KTCYx(50);  // Wait for 500 ms after onset of activity
+	GetData(); //Sample first set 
+	Delay10KTCYx(50);  // Wait for 500 ms after onset of activity
+	GetData(); //Sample second set
+
+	//Determine whether  from oldV1, V1, oldV2, V2
+	oldV1=Check(oldV1);
+	V1=Check(V1);
+	oldV2=Check(oldV2);
+	V2=Check(V2);
+	result = 8*oldV1+4*V1+2*oldV2+V2;
+}
+ 
+// Transmit the result to external interface
+void Transmit(int info){
+    // For now, display EMG
         //Debounced value for Ch1
         LCDGoto(6,0);
-        LCDPutByte(DV1);
+        LCDPutByte(oldV1);
+        LCDGoto(9,0);
+        LCDPutByte(V1);
         //Debounced value for Ch2
         LCDGoto(6,1);
-        LCDPutByte(DV2);
+        LCDPutByte(oldV2);
+        LCDGoto(9,0);
+        LCDPutByte(V2);
         //Display command output
-        LCDGoto(9,1);
+        LCDGoto(12,1);
         LCDPutByte(EMG);
 }
 
-void SleepMode(void){
-    LCDClear();
-    LCDWriteStr("SLEEP MODE");
-    Sleep();
-    State = 0;  
+void Reset(void){
+	oldV1=0;
+	oldV2=0;
+	V1=0;
+	V2=0;
+	EMG=0;
 }
 
 //Test functions
