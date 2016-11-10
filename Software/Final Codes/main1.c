@@ -39,7 +39,7 @@ int t; // sampling period (x10^-2 seconds)
 //Function definitions
 void SysInit(void);
 int GetData(int channel);
-int Debounce(int raw, int oldraw, int olddeb);
+int Debounce(int raw, int oldraw, int olddeb, int channel);
 int Decode(int channel1, int channel2);
 void Transmit(int info);
 void Calibrate(void);
@@ -52,7 +52,7 @@ void main(void)
 	int V1; // processed signal from lead 1
 	int V2; // processed signal from lead 2
 	int EMG; // decoded result
-	int count
+	int count;
 
     //Initialize
     SysInit();
@@ -142,20 +142,21 @@ void SysInit(void)
 }
 
 void Calibrate(void){
-	int count
-	int ca1
-	int ca2
+	int count;
+	int ca1;
+	int ca2;
+    char str[4];
     //Calibration period
     // Display EMG
-	LCDGoto(3,0);
+	LCDGoto(5,0);
 	LCDPutByte(0);
-    Delay1000KTCYx(10); //Wait 10 seconds for system to settle
+    Delay10KTCYx(1000); //Wait 10 seconds for system to settle
     max1=0;
     min1=1023;
     max2=0;
     min2=1023;
     // Display EMG
-	LCDGoto(3,0);
+	LCDGoto(5,0);
 	LCDPutByte(8);
     for(count=0;count<200;count++){ //Calibrate for 10 seconds
     	//Ch1
@@ -163,7 +164,7 @@ void Calibrate(void){
     	if(ca1>max1){
     		max1=ca1;
     	}
-    	if(ca1<max1){
+    	if(ca1<min1){
     		min1=ca1;
     	}
     	//Ch2
@@ -171,18 +172,49 @@ void Calibrate(void){
     	if(ca2>max2){
     		max2=ca2;
     	}
-    	if(ca2<max2){
+    	if(ca2<min2){
     		min2=ca2;
     	}
+        LCDGoto(8,0);
+		sprintf(str,"%04u",ca1);
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        //Raw value for Ch1
+        LCDGoto(8,1);
+        sprintf(str,"%04u",ca2); 
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+    Delay10KTCYx(5);
     }
+    LCDGoto(5,0);
+	LCDPutByte(1);
     //need to figure this out
     thres1=min1+(max1-min1)*3/10;
-    thres2=min2+(max2+min2)*3/10;
+    thres2=min2+(max2-min2)*3/10;
+    //Raw value for Ch1
+    	LCDGoto(0,0);
+		sprintf(str,"%04u",thres1);
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
+        //Raw value for Ch1
+        LCDGoto(0,1);
+        sprintf(str,"%04u",thres2); 
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
 }
 
 // ADC sampling of EMG leads
 int GetData(int channel) {
 	int volt;
+    char str[4];
 	if(channel==1){
 		//Channel 1
 		ADCON0bits.CHS=0000; //Select RA0
@@ -199,19 +231,26 @@ int GetData(int channel) {
 		volt=ADRESH;
 		volt=(volt<<8) | ADRESL; //Make 10-bit
 	}
+        LCDGoto(8,channel-1);
+        sprintf(str,"%04u",volt); 
+        LCDPutChar(str[0]);
+        LCDPutChar(str[1]);
+        LCDPutChar(str[2]);
+        LCDPutChar(str[3]);
 	return volt;
 }
 
 // Process signal from each channel into either high or low
 int Debounce(int raw, int oldraw, int olddeb, int channel){
+    int thres;
 	float slope;
 	float slopeThres;
 	//Set threshold
 	if(channel=1){
-		thres=thres1
+		thres=thres1;
 	}
 	if(channel=2){
-		thres=thres2
+		thres=thres2;
 	}
 
 	// Find instantaneous slope
@@ -261,7 +300,7 @@ int Decode(int channel1, int channel2){
 // Transmit the result to external interface
 void Transmit(int info){
     // Display EMG
-	LCDGoto(8,1);
+	LCDGoto(13,1);
 	LCDPutByte(info);
 	// Transmit EMG
 	TXREG1 = info;
