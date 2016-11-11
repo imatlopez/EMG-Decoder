@@ -1,7 +1,7 @@
 Protel Design System Design Rule Check
 PCB File : \\Mac\Home\Desktop\Duke\BME464\Electronics\Main.PcbDoc
-Date     : 11/7/16
-Time     : 12:51:46 PM
+Date     : 11/11/16
+Time     : 3:24:13 PM
 
 Processing Rule : Room Filtering1 (Bounding Region = (995mil, 1235mil, 2765mil, 1825mil) (InComponentClass('Filtering1'))
 Rule Violations :0
@@ -69,7 +69,7 @@ Rule Violations :0
 Processing Rule : Room Neg (Bounding Region = (1410mil, 1225mil, 1945mil, 1570mil) (InComponentClass('Neg'))
 Rule Violations :0
 
-Processing Rule : Room Pos (Bounding Region = (1071.614mil, 1302.323mil, 1331.614mil, 1762.323mil) (InComponentClass('Pos'))
+Processing Rule : Room Pos (Bounding Region = (1015mil, 1302.323mil, 1392mil, 1719mil) (InComponentClass('Pos'))
 Rule Violations :0
 
 

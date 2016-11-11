@@ -1,5 +1,5 @@
 ------------------------------------------------------------------------------------------
-Gerber File Extension Report For: Main.GBR   11/11/16  2:34:36 PM
+Gerber File Extension Report For: Main.GBR   11/11/16  3:24:47 PM
 ------------------------------------------------------------------------------------------
 
 
@@ -7,8 +7,6 @@ Gerber File Extension Report For: Main.GBR   11/11/16  2:34:36 PM
 Layer Extension     Layer Description                      
 ------------------------------------------------------------------------------------------
 .gbr                Top Layer                               
-.gbr                Top Power                               
-.gbr                Bottom Power                            
 .gbr                Bottom Layer                            
 .gbr                Bottom Pad Master                       
 .gbr                Top Pad Master                          
