@@ -232,35 +232,35 @@ DocumentPath=Project Outputs for Electronics\NC Drill\Main.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Bot.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Plane_1.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument12]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Top.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Plane_2.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument13]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Bot.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Bot.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument14]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Top.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Top.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument15]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Bot.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Bot.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument16]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Top.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Top.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument17]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Paste_Bot.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Bot.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument18]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Paste_Top.gbr
+DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Top.gbr
 DItemRevisionGUID=
 
 [GeneratedDocument19]

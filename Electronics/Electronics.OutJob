@@ -88,7 +88,7 @@ OutputEnabled3_OutputMedium3=4
 OutputEnabled3_OutputMedium4=0
 OutputDefault3=0
 Configuration3_Name1=OutputConfigurationParameter1
-Configuration3_Item1=FileComment= |FileSubject=Autodetect|GenerateDRCRulesFile=True|GerberUnit=Imperial|MinusApertureTolerance=50|NumberOfDecimals=6|OptimizeChangeLocationCommands=True|PlotBlindViasPairs=False|PlotBoardProfile=True|PlotDrillDrawingPairs=False|PlotDrillGuidePairs=False|PlotNPTHPairs=False|PlotPTHPairs=False|PlotX2.Set=SerializeLayerHash.Version~2,ClassName~TLayerToBoolean,16973830~1,16973849~1,16973834~1,16973833~1,16973831~1,16842751~1,16973835~1,16777217~1,16973832~1,16973848~1|PlusApertureTolerance=50|Record=GerberX2View|Sorted=False
+Configuration3_Item1=FileComment= |FileSubject=Autodetect|GenerateDRCRulesFile=True|GerberUnit=Imperial|MinusApertureTolerance=50|NumberOfDecimals=6|OptimizeChangeLocationCommands=True|PlotBlindViasPairs=False|PlotBoardProfile=True|PlotDrillDrawingPairs=False|PlotDrillGuidePairs=False|PlotNPTHPairs=False|PlotPTHPairs=False|PlotX2.Set=SerializeLayerHash.Version~2,ClassName~TLayerToBoolean,16973830~1,16973849~1,16973834~1,16973831~1,16842751~1,16973835~1,16777217~1,16973848~1,16842753~1,16842754~1|PlusApertureTolerance=50|Record=GerberX2View|Sorted=True
 OutputType4=NC Drill
 OutputName4=NC Drill Files
 OutputCategory4=Fabrication
