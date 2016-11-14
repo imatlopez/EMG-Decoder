@@ -1,77 +1,77 @@
 Protel Design System Design Rule Check
 PCB File : \\Mac\Home\Desktop\Duke\BME464\Electronics\Main.PcbDoc
 Date     : 11/14/16
-Time     : 12:17:21 PM
+Time     : 2:24:24 PM
 
-Processing Rule : Room Pos (Bounding Region = (1015mil, 1302.323mil, 1392mil, 1719mil) (InComponentClass('Pos'))
-Rule Violations :0
-
-Processing Rule : Room Neg (Bounding Region = (1410mil, 1225mil, 1945mil, 1570mil) (InComponentClass('Neg'))
-Rule Violations :0
-
-Processing Rule : Room Main (Bounding Region = (3030mil, 2094mil, 3070mil, 2812mil) (InComponentClass('Main'))
-Rule Violations :0
-
-Processing Rule : Room Input2 (Bounding Region = (1370mil, 2425mil, 1690mil, 2910mil) (InComponentClass('Input2'))
-Rule Violations :0
-
-Processing Rule : Room Input1 (Bounding Region = (2310mil, 2416.85mil, 2630mil, 2901.85mil) (InComponentClass('Input1'))
-Rule Violations :0
-
-Processing Rule : Room Drive (Bounding Region = (1748.15mil, 2360mil, 2253.15mil, 2769mil) (InComponentClass('Drive'))
-Rule Violations :0
-
-Processing Rule : Room Digital (Bounding Region = (1604.121mil, 1610.879mil, 2374.121mil, 2380.879mil) (InComponentClass('Digital'))
-Rule Violations :0
-
-Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
-Rule Violations :0
-
-Processing Rule : Net Antennae (Tolerance=0mil) (All)
-Rule Violations :0
-
-Processing Rule : Silk to Silk (Clearance=2mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Silk To Solder Mask (Clearance=5mil) (Disabled)(IsPad),(All)
-Rule Violations :0
-
-Processing Rule : Minimum Solder Mask Sliver (Gap=1mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Hole Size Constraint (Min=1mil) (Max=150mil) (All)
-Rule Violations :0
-
-Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
-Rule Violations :0
-
-Processing Rule : Width Constraint (Min=10mil) (Max=20mil) (Preferred=10mil) (All)
-Rule Violations :0
-
-Processing Rule : Power Plane Connect Rule(Direct Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
-Rule Violations :0
-
-Processing Rule : Clearance Constraint (Gap=7mil) (All),(All)
-Rule Violations :0
-
-Processing Rule : Un-Routed Net Constraint ( (All) )
-Rule Violations :0
-
-Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
-Rule Violations :0
-
-Processing Rule : SMD Neck-Down Constraint (Percent=100%) (All)
+Processing Rule : Room Filtering1 (Bounding Region = (995mil, 1235mil, 2765mil, 1825mil) (InComponentClass('Filtering1'))
 Rule Violations :0
 
 Processing Rule : Room Filtering2 (Bounding Region = (993.89mil, 2101mil, 2763.89mil, 2691mil) (InComponentClass('Filtering2'))
 Rule Violations :0
 
-Processing Rule : Room Filtering1 (Bounding Region = (995mil, 1235mil, 2765mil, 1825mil) (InComponentClass('Filtering1'))
+Processing Rule : SMD Neck-Down Constraint (Percent=100%) (All)
+Rule Violations :0
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+Rule Violations :0
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+Rule Violations :0
+
+Processing Rule : Clearance Constraint (Gap=7.5mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Direct Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=10mil) (Max=20mil) (Preferred=10mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=1000mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=1mil) (Max=150mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=10mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=1mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=5mil) (Disabled)(IsPad),(All)
+Rule Violations :0
+
+Processing Rule : Silk to Silk (Clearance=2mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Room Digital (Bounding Region = (1604.121mil, 1610.879mil, 2374.121mil, 2380.879mil) (InComponentClass('Digital'))
+Rule Violations :0
+
+Processing Rule : Room Drive (Bounding Region = (1748.15mil, 2360mil, 2253.15mil, 2769mil) (InComponentClass('Drive'))
+Rule Violations :0
+
+Processing Rule : Room Input1 (Bounding Region = (2310mil, 2416.85mil, 2630mil, 2901.85mil) (InComponentClass('Input1'))
+Rule Violations :0
+
+Processing Rule : Room Input2 (Bounding Region = (1370mil, 2425mil, 1690mil, 2910mil) (InComponentClass('Input2'))
+Rule Violations :0
+
+Processing Rule : Room Main (Bounding Region = (3030mil, 2094mil, 3070mil, 2812mil) (InComponentClass('Main'))
+Rule Violations :0
+
+Processing Rule : Room Neg (Bounding Region = (1410mil, 1225mil, 1945mil, 1570mil) (InComponentClass('Neg'))
+Rule Violations :0
+
+Processing Rule : Room Pos (Bounding Region = (1015mil, 1302.323mil, 1392mil, 1719mil) (InComponentClass('Pos'))
 Rule Violations :0
 
 
 Violations Detected : 0
-Time Elapsed        : 00:00:01
+Time Elapsed        : 00:00:02
