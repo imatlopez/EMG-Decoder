@@ -68,6 +68,9 @@ void main(void)
 		else{
 			GetDataAndDebounce();
 			EMG=(2*V1)+V2; //will keep looping and do nothing as long as EMG~=0
+			if(EMG==0){
+				Transmit(EMG);
+			}
 		}
 		Delay10KTCYx(t);  // Delay t/100 seconds
 	};
@@ -338,6 +341,7 @@ int Decode(void){
 	}
 	// if only one of them are high =>wait and check
 	else{
+		Delay10KTCYx(t); // wait extra cycle
 		GetDataAndDebounce();
 		outNum2 = (2*V1)+V2;
 		if(outNum2==outNum1){
