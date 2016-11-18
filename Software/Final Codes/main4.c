@@ -61,7 +61,7 @@ void main(void)
     	//If the output was 0 before
     	if(EMG==0){
 		GetDataAndDebounce();
-		EMG=Decode(V1,V2); // Decode
+		EMG=Decode(); // Decode
         Transmit(EMG); // Print value to screen or communication
     	}
     	//If the output was something else, need to go back to 0 first
@@ -332,11 +332,11 @@ int Decode(void){
 	outNum1 = (2*V1)+V2;
 	//Coming from all channels low
 	//Keep going if nothing is high
-	if (outNum==0){
+	if (outNum1==0){
 		return 0;
 	}
 	// if both are high => change command
-	if (outNum==3){
+	if (outNum1==3){
 		return 3;
 	}
 	// if only one of them are high =>wait and check
@@ -345,9 +345,9 @@ int Decode(void){
 		GetDataAndDebounce();
 		outNum2 = (2*V1)+V2;
 		if(outNum2==outNum1){
-			return outNum; //Return 1 or 2
+			return outNum2; //Return 1 or 2
 		}
-		if(outNum==3){
+		if(outNum2==3){
 		return 3;
 		}
 		else{
@@ -364,4 +364,3 @@ void Transmit(int info){
 	// Transmit EMG
 	TXREG1 = info; // Set info to be transmitted
 }
-
