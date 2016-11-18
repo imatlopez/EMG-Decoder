@@ -54,11 +54,12 @@ void main(void)
 
     //Initialize
     SysInit();
-	Calibrate();
     LCDClear();
+    Calibrate();
 
     // EMG Decoder Loop
     while(1) {
+        // oscillate
 		rawV1 = GetData(1); // Acquire voltage from channel 1
 		rawV2 = GetData(2); // Acquire voltage from channel 2
 		V1=Debounce(rawV1, oldRawV1,oldV1,1); //Process voltage from channel 1
@@ -67,10 +68,12 @@ void main(void)
 		V2=Debounce(rawV2,oldRawV2,oldV2,2); //Process voltage from channel 2
 		oldRawV2=rawV2;
 		oldV2=V2;
+        /*
 		if( ((oldV1==0 && V1==1) || (oldV2==0 && V2==1)) && !(V1==1 && V2==1)){ // need to debounce simultaneous contractions
-			Delay10KTCYx(1);  // Delay 10 ms
+			Delay10KTCYx(t);  // Delay a period
 			continue;
 		}
+         */
 		EMG=Decode(V1,V2); // Decode
         Transmit(EMG); // Print value to screen or communication
 		Delay10KTCYx(t);  // Delay t/100 seconds
@@ -82,13 +85,18 @@ void SysInit(void)
 {
     OSCCON=0b01010110; //4 MHz internal oscillator
 
-    //Set up ADC channel on RA0
-    ANSELAbits.ANSA0 = 1;
-    TRISAbits.RA1 = 1; //Analog in
+    //Set up ADC channel on RA2
+    TRISA=0x04;
+    ANSELAbits.ANSA2 = 1;
+    TRISAbits.RA2 = 1; //Analog in
 
+    //Set up ADC channel on RA3 
+    ANSELAbits.ANSA3 = 1;
+    TRISAbits.RA3 = 1; //Analog in
+    
     //Set up ADC channel on RA1 
-    ANSELAbits.ANSA1 = 1;
-    TRISAbits.RA0 = 1; //Analog in
+    ANSELAbits.ANSA1 = 0;
+    TRISAbits.RA1 = 0; //Digital out
 
     //Set up ADC parameters
     ADCON2bits.ACQT=001; //2 TAD
@@ -166,8 +174,8 @@ void Calibrate(void){
 	descend2=0;
     // Calibrate mag and slope thresholds
 	LCDGoto(5,0);
-	LCDPutByte(8);
-    for(i=0;i<200;i++){ //10 seconds of calibration data
+	LCDPutByte(1);
+    for(i=0;i<50;i++){ //10 seconds of calibration data
     	//Channel 1 magnitude calibration
     	raw1=GetData(1); // Acquire voltage from channel 1
     	if(raw1>max1){
@@ -198,7 +206,8 @@ void Calibrate(void){
 		if(slope<descend2)
 			descend2 = slope;
 		old2 = raw2;
-		//Display raw value for Ch1
+        /*
+        //Display raw value for Ch1
         LCDGoto(8,0);
 		sprintf(str,"%04u",raw1);
         LCDPutChar(str[0]);
@@ -212,10 +221,11 @@ void Calibrate(void){
         LCDPutChar(str[1]);
         LCDPutChar(str[2]);
         LCDPutChar(str[3]);
+        */
 		Delay10KTCYx(t);
     }
     LCDGoto(5,0);
-	LCDPutByte(1);
+	LCDPutByte(2);
     //Need to figure this out
     thres1=min1+(max1-min1)*3/10;
     thres2=min2+(max2-min2)*3/10;
@@ -223,16 +233,29 @@ void Calibrate(void){
 	dslope1 = descend1*0.9;
 	rslope2 = rising2*0.9;
 	dslope2 = descend2*0.9;
+    descend1 = -1*descend1;
     //Ch1 mag thres
     LCDGoto(0,0);
-	sprintf(str,"%04u",thres1);
+	sprintf(str,"%04u", min1);
     LCDPutChar(str[0]);
     LCDPutChar(str[1]);
     LCDPutChar(str[2]);
     LCDPutChar(str[3]);
     //Ch2 mag thres
 	LCDGoto(0,1);
-    sprintf(str,"%04u",thres2); 
+    sprintf(str,"%04u",max1); 
+    LCDPutChar(str[0]);
+    LCDPutChar(str[1]);
+    LCDPutChar(str[2]);
+    LCDPutChar(str[3]);
+    LCDGoto(8,0);
+    sprintf(str,"%04u",rising1); 
+    LCDPutChar(str[0]);
+    LCDPutChar(str[1]);
+    LCDPutChar(str[2]);
+    LCDPutChar(str[3]);
+    	LCDGoto(8,1);
+    sprintf(str,"%04u",descend1); 
     LCDPutChar(str[0]);
     LCDPutChar(str[1]);
     LCDPutChar(str[2]);
@@ -242,10 +265,10 @@ void Calibrate(void){
 // ADC sampling of EMG leads
 int GetData(int channel) {
 	int volt;
-    char str[4];
+    //char str[4];
 	if(channel==1){
 		//Channel 1
-		ADCON0bits.CHS=0000; //Select RA0
+		ADCON0bits.CHS=2; //Select RA0
 		ADCON0bits.GO=1; //Start conversion
 		while(ADCON0bits.GO==1){}; //Wait for finish
 		volt=ADRESH;
@@ -253,18 +276,20 @@ int GetData(int channel) {
 	}
 	if(channel==2){
 		//Channel2
-		ADCON0bits.CHS=0001; //Select RA1
+		ADCON0bits.CHS=3; //Select RA1
 		ADCON0bits.GO=1; //Start conversion
 		while(ADCON0bits.GO==1){}; //Wait for finish
 		volt=ADRESH;
 		volt=(volt<<8) | ADRESL; //Make 10-bit
 	}
+    /*
 	LCDGoto(8,channel-1);
 	sprintf(str,"%04u",volt); 
 	LCDPutChar(str[0]);
 	LCDPutChar(str[1]);
     LCDPutChar(str[2]);
     LCDPutChar(str[3]);
+     */
 	return volt;
 }
 
@@ -332,9 +357,8 @@ int Decode(int channel1, int channel2){
 // Transmit the result to external interface
 void Transmit(int info){
     // Display EMG
-	LCDGoto(13,1);
-	LCDPutByte(info);
+	//LCDGoto(13,1);
+	//LCDPutByte(info);
 	// Transmit EMG
 	TXREG1 = info; // Set info to be transmitted
 }
-
