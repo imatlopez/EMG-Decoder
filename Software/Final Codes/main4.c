@@ -69,6 +69,7 @@ void main(void)
 			EMG=(2*V1)+V2; //will keep looping and do nothing as long as EMG~=0
 			if(EMG==0){
 				Transmit(EMG);
+                
 			}
 		}
 		Delay10KTCYx(t);  // Delay t/100 seconds
@@ -128,7 +129,13 @@ void SysInit(void)
 	//Configure variables (adjustable)
     //thres=300; //Initial threshold
     //hyst=100; //Hysteresis width
-	t=20; //200 ms (1 corresponds to 10 ms)
+	t=5; //200 ms (1 corresponds to 10 ms)
+    
+    	//For testing
+	    //Set up digital on RA3
+    ANSELAbits.ANSA3 = 0; //Set to digital
+    TRISAbits.RA3 = 0; //Set to output
+PORTAbits.RA3=0;
 }
 
 //Calibration period to adjust for user/muscle activity
@@ -218,10 +225,10 @@ void Calibrate(void){
     //Need to figure this out
     thres1=min1+(max1-min1)*3/10;
     thres2=min2+(max2-min2)*3/10;
-	rslope1 = rising1*0.9;
-	dslope1 = descend1*0.9;
-	rslope2 = rising2*0.9;
-	dslope2 = descend2*0.9;
+	rslope1 = rising1*0.5;
+	dslope1 = descend1*0.8;
+	rslope2 = rising2*0.5;
+	dslope2 = descend2*0.8;
     //Ch1 mag thres
     LCDGoto(0,0);
 	sprintf(str,"%04u",thres1);
@@ -290,7 +297,7 @@ int Debounce(int raw, int oldraw, int olddeb, int channel){
 	// slopeThres = 3.069;
 	// If the signal was low before:
 	if (olddeb==0){
-		if ((slope>risThres) || (raw>thres)){
+		if ((slope>risThres) || (raw>thres && slope>0)){
 			return 1;
 		}
 		else{
@@ -299,7 +306,7 @@ int Debounce(int raw, int oldraw, int olddeb, int channel){
 	}
 	// If the level was high before:
     if (olddeb==1){
-		if((slope<0 && raw<thres)){ //(slope<desThres) || (slope<0 && raw<Thresh)
+		if((slope<0 && raw<thres) || (slope<desThres)){ //(slope<desThres) || (slope<0 && raw<Thresh)
             return 0;
         }
         else{
@@ -356,6 +363,8 @@ int Decode(void){
 	}
 }
 
+
+
 // Transmit the result to external interface
 void Transmit(int info){
     // Display EMG
@@ -363,4 +372,10 @@ void Transmit(int info){
 	LCDPutByte(info);
 	// Transmit EMG
 	TXREG1 = info; // Set info to be transmitted
+    if(info==1){
+        PORTAbits.RA3=1;
+    }
+    else{
+        PORTAbits.RA3=0;
+    }
 }
