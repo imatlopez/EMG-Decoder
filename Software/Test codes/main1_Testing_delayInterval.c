@@ -73,6 +73,7 @@ void main(void)
 		}
 		EMG=Decode(V1,V2); // Decode
         Transmit(EMG); // Print value to screen or communication
+        checkDelay();
 		Delay10KTCYx(t);  // Delay t/100 seconds
 	};
 }
@@ -130,12 +131,13 @@ void SysInit(void)
 	//Configure variables (adjustable)
     //thres=300; //Initial threshold
     //hyst=100; //Hysteresis width
-	t=20; //200 ms (1 corresponds to 10 ms)
+	t=10; //200 ms (1 corresponds to 10 ms)
 
 	//For delay testing
 	    //Set up digital on RA3
     ANSELAbits.ANSA3 = 0; //Set to digital
     TRISAbits.RA3 = 0; //Set to output
+    PORTAbits.RA3=0;
 }
 
 
@@ -160,12 +162,13 @@ int GetData(int channel) {
 		volt=ADRESH;
 		volt=(volt<<8) | ADRESL; //Make 10-bit
 	}
-	LCDGoto(8,channel-1);
+	/*LCDGoto(8,channel-1);
 	sprintf(str,"%04u",volt); 
 	LCDPutChar(str[0]);
 	LCDPutChar(str[1]);
     LCDPutChar(str[2]);
     LCDPutChar(str[3]);
+     * */
 	return volt;
 }
 
@@ -239,7 +242,7 @@ void checkDelay(void){
 	if(PORTAbits.RA3==0){
 		PORTAbits.RA3=1;
 	}
-	if(PORTAbits.RA3==1){
+	else{
 		PORTAbits.RA3=0;
 	}
 }
@@ -248,9 +251,8 @@ void checkDelay(void){
 // Transmit the result to external interface
 void Transmit(int info){
     // Display EMG
-	LCDGoto(13,1);
-	LCDPutByte(info);
+	//LCDGoto(13,1);
+	//LCDPutByte(info);
 	// Transmit EMG
 	TXREG1 = info; // Set info to be transmitted
 }
-
