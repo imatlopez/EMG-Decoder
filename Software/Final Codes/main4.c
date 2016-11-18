@@ -54,7 +54,6 @@ void main(void)
     //Initialize
     SysInit();
 	Calibrate();
-    LCDClear();
 
     // EMG Decoder Loop
     while(1) {
@@ -150,9 +149,10 @@ void Calibrate(void){
 	int descend2;
     char str[4];
     // Initialize calibration
-	LCDGoto(5,0);
+	LCDClear();
+    LCDGoto(5,0);
 	LCDPutByte(0);
-    Delay10KTCYx(1000); //Wait 10 seconds for system to settle
+    Delay10KTCYx(200); //Wait 2 seconds for system to settle
 	old1=0;
 	old2=0;
     max1=0;
@@ -166,7 +166,7 @@ void Calibrate(void){
     // Calibrate mag and slope thresholds
 	LCDGoto(5,0);
 	LCDPutByte(8);
-    for(i=0;i<200;i++){ //10 seconds of calibration data
+    for(i=0;i<50;i++){ //10 seconds of calibration data
     	//Channel 1 magnitude calibration
     	raw1=GetData(1); // Acquire voltage from channel 1
     	if(raw1>max1){
