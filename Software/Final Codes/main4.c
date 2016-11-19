@@ -36,6 +36,7 @@ int dslope2; // descending slope threshold
 int hyst; // hysteresis range
 int state;
 int t; // sampling period (x10^-2 seconds)
+int EMG;
 
 //Function definitions
 void SysInit(void);
@@ -48,8 +49,6 @@ void Transmit(int info);
 
 void main(void)
 {
-     // Local variables
-	int EMG; // decoded result
 
     //Initialize
     SysInit();
@@ -58,19 +57,21 @@ void main(void)
     // EMG Decoder Loop
     while(1) {
     	//If the output was 0 before
-    	if(EMG==0){
-		GetDataAndDebounce();
-		EMG=Decode(); // Decode
-        Transmit(EMG); // Print value to screen or communication
-    	}
-    	//If the output was something else, need to go back to 0 first
-		else{
-			GetDataAndDebounce();
+    	if(EMG==3){
+            GetDataAndDebounce();
 			EMG=(2*V1)+V2; //will keep looping and do nothing as long as EMG~=0
 			if(EMG==0){
 				Transmit(EMG);
-                
 			}
+            else{
+                EMG=3;
+            }
+        }
+    	//If the output was something else, need to go back to 0 first
+		else{
+		GetDataAndDebounce();
+		EMG=Decode(); // Decode
+        Transmit(EMG); // Print value to screen or communication
 		}
 		Delay10KTCYx(t);  // Delay t/100 seconds
 	};
@@ -225,10 +226,10 @@ void Calibrate(void){
     //Need to figure this out
     thres1=min1+(max1-min1)*3/10;
     thres2=min2+(max2-min2)*3/10;
-	rslope1 = rising1*0.5;
-	dslope1 = descend1*0.8;
-	rslope2 = rising2*0.5;
-	dslope2 = descend2*0.8;
+	rslope1 = rising1*0.6;
+	dslope1 = descend1*0.7;
+	rslope2 = rising2*0.6;
+	dslope2 = descend2*0.7;
     //Ch1 mag thres
     LCDGoto(0,0);
 	sprintf(str,"%04u",thres1);
