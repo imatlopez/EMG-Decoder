@@ -30,6 +30,8 @@ void main(void){
     //Initialize
     SysInit();
     LCDClear();
+    				LCDGoto(4,0);
+				LCDPutByte(state);
 
     // EMG Decoder Loop
     while(1) {
@@ -39,7 +41,7 @@ void main(void){
 		if(oldEMG==EMG){
 		}
 		else{     
-			LCDGoto(0,0);
+			LCDGoto(1,0);
 			LCDPutByte(EMG);
 			//Configure everything to low
 			O1=0;
@@ -71,14 +73,16 @@ void main(void){
             	break;
 			
 			case 3: //change state
-				state++
+				state++;
 				if(state==3){
 					state=1;
 				}
-				LCDGoto(0,1);
+				LCDGoto(4,0);
 				LCDPutByte(state);
 				break;
 			}
+            
+            oldEMG=EMG;
         	
         	//Implement the configuration (so there's no short moment with everything off)
         	if(O1==0)
@@ -98,7 +102,7 @@ void main(void){
 			else
 				PORTAbits.RA3=1;
 			}
-			Delay10KTCYx(20);  // Delay 1/5 second
+			Delay10KTCYx(5);  // Delay 1/5 second
 	}
 }
 
