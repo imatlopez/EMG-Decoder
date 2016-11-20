@@ -84,6 +84,11 @@ void main(void){
             
             oldEMG=EMG;
         	
+            //Safety precaution for the switch circuit
+            PORTAbits.RA0=0;
+            PORTAbits.RA1=0;
+            PORTAbits.RA2=0;
+            PORTAbits.RA3=0;
         	//Implement the configuration (so there's no short moment with everything off)
         	if(O1==0)
 				PORTAbits.RA0=0;
@@ -102,7 +107,7 @@ void main(void){
 			else
 				PORTAbits.RA3=1;
 			}
-			Delay10KTCYx(5);  // Delay 1/5 second
+			Delay10KTCYx(1);  // Delay 1/5 second
 	}
 }
 
