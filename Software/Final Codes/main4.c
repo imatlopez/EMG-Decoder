@@ -174,7 +174,7 @@ void Calibrate(void){
     // Calibrate mag and slope thresholds
 	LCDGoto(5,0);
 	LCDPutByte(8);
-    for(i=0;i<50;i++){ //10 seconds of calibration data
+    for(i=0;i<100;i++){ //10 seconds of calibration data
     	//Channel 1 magnitude calibration
     	raw1=GetData(1); // Acquire voltage from channel 1
     	if(raw1>max1){
@@ -227,9 +227,9 @@ void Calibrate(void){
     thres1=min1+(max1-min1)*3/10;
     thres2=min2+(max2-min2)*3/10;
 	rslope1 = rising1*0.6;
-	dslope1 = descend1*0.7;
+	dslope1 = descend1*0.8;
 	rslope2 = rising2*0.6;
-	dslope2 = descend2*0.7;
+	dslope2 = descend2*0.8;
     //Ch1 mag thres
     LCDGoto(0,0);
 	sprintf(str,"%04u",thres1);
