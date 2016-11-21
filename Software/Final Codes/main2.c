@@ -56,6 +56,16 @@ void main(void)
 			O2=0;
 			O3=1;
             break;
+		case 80: //System settling
+			LCDGoto(0,0);
+			LCDWriteStr("Wait");
+			break;
+		case 81: //Calibrating
+			LCDGoto(0,0);
+			LCDWriteStr("Calibrate");
+		case 82: //Ready
+			LCDGoto(0,0);
+			LCDClear();	
 		}
         if(O1==0)
 			PORTAbits.RA0=0;
