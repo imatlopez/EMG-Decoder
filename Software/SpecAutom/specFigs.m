@@ -26,11 +26,10 @@ clear raw f A i j R
 pf = [68 130 180];
 for i = 1:3
     figure(i); j = pf(i); t = (1:length(dat{j,3}))'/1e4;
-    plot(t, dat{j,3}(:,3), 'k-', t, dat{j,3}(:,1), 'r-')
+    plot(t, dat{j,3}(:,3), 'k', t, dat{j,3}(:,1), 'r')
     xlabel('Time (s)'); ylabel('Amplitude (V)'); fixplot;
     title(sprintf('System Response at a %0.1f Hz 10 mV Input',dat{j,1}));
-    legend('Digital out','Analog out','location','best');
-    eval(sprintf('print -dpng Proof%d',i));
+    legend('AO','DO','location','best'); eval(sprintf('print -dpng Proof%d',i));
 end
 
 %% Frequency Response
