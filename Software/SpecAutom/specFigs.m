@@ -1,98 +1,114 @@
 %% Load
-clear; close all; filename = {...
-    'freq-1206-132412.mat',...  % F - Diff
-    'freq-1206-132656.mat',...  % F - Comm
-    'amp-1206-132847.mat',...   % A - Diff
-    'amp-1206-133025.mat'};     % A = Comm
+clear; close all;   
 R = [1.15 1.26]; % Ohms
 
-dat = cell(200,6);
-for i = 1:4
-    load(filename{i});
-    dat(:,2+i) = raw(:,3);
-    if i < 3
-        dat(:,1) = raw(:,1);
-    else
-        for j = 1:200
-            dat{j,2+i}(:,2) = dat{j,2+i}(:,2) / R(1);
-            dat{j,2+i}(:,4) = dat{j,2+i}(:,4) / R(2);
-        end
-        dat(:,2) = raw(:,1);
-    end
-end
-clear raw f A i j R
+load('freq-1207-121555.mat');   % F - Diff
+F  = cell2mat(raw(:,1));
+FD = raw(:,3);
+
+load('freq-1207-123435.mat');   % F - Comm
+FC = raw(:,3);
+
+load('amp-1207-132729.mat');    % A - Diff
+A  = cell2mat(raw(:,1));
+AD = raw(:,3);
+
+load('amp-1207-123824.mat');    % A = Comm
+AC = raw(:,3);
+
+clear i j
+dt = 1/1e4;
+t = (0:dt:1-dt)';
 
 %% Proof Plots
-pf = [68 130 180];
+pf = [30 67 80];
 for i = 1:3
-    figure(i); j = pf(i); t = (1:length(dat{j,3}))'/1e4;
-    plot(t, dat{j,3}(:,3), 'k', t, dat{j,3}(:,1), 'r')
-    xlabel('Time (s)'); ylabel('Amplitude (V)'); fixplot;
-    title(sprintf('System Response at a %0.1f Hz 10 mV Input',dat{j,1}));
-    legend('AO','DO','location','best'); eval(sprintf('print -dpng Proof%d',i));
+    figure(i); j = pf(i);
+    plot(t, FD{j}(:,3), 'k', t, FD{j}(:,1), 'r')
+    ylim([0 1.2])
+    xlabel('Time (s)');
+    ylabel('Amplitude (V)');
+    title(sprintf('System Response at 10 mV, %0.1f Hz',F(j)));
+    legend('Analog','Digital','location','best');
+    fixplot;
+    eval(sprintf('print -dpng Proof%d',i));
 end
 
 %% Frequency Response
-figure(4); x = cell2mat(dat(1:end-1,1));
-y = [cellfun(@(x,f) peakmag(x(:,3), f), dat(1:end-1,3), dat(1:end-1,1)),...
-    cellfun(@(x,f) peakmag(x(:,1), f), dat(1:end-1,3), dat(1:end-1,1))];
-semilogx(x,y(:,1),'k',x,y(:,2),'r'); xlabel('Frequency (Hz)')
-ylabel('Response (dB)'); title('Frequency Response for Sinusoidal Input')
-legend('AO','DO','location','best'); fixplot; print -dpng FRQResp
+figure(4);
+Y = [cellfun(@(x) peakmag(x(:,3)), FD), cellfun(@(x) peakmag(x(:,1)), FD)];
+semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
+xlabel('Frequency (Hz)')
+ylabel('Response (dB)');
+title('Frequency Response for Sinusoidal Input')
+legend('Analog','Digital','location','best');
+fixplot;
+print -dpng FRQResp
 
 %% Common Mode Rejection
-figure(5); x = cell2mat(dat(1:end-1,1));
-y = [cellfun(@(x,y) peakcmr(x(:,3), y(:,3)), dat(1:end-1,3), dat(1:end-1,4)),...
-    cellfun(@(x,y) peakcmr(x(:,1), y(:,1)), dat(1:end-1,3), dat(1:end-1,4))];
-semilogx(x,y(:,1),'k',x,y(:,2),'r'); xlabel('Frequency (Hz)');
-ylabel('Rejection Ratio (dB)'); title('CM Rejection Ratio versus Frequency');
-legend('AO','DO','location','best'); fixplot; print -dpng CmrrFRQ
-figure(6); x = cell2mat(dat(1:end-1,2));
-y = [cellfun(@(x,y) peakcmr(x(:,3), y(:,3)), dat(1:end-1,5), dat(1:end-1,6)),...
-    cellfun(@(x,y) peakcmr(x(:,1), y(:,1)), dat(1:end-1,5), dat(1:end-1,6))];
-semilogx(x,y(:,1),'k',x,y(:,2),'r'); xlabel('Input (V)');
-ylabel('Rejection Ratio (dB)'); title('CM Rejection Ratio versus Amplitide');
-legend('AO','DO','location','best'); fixplot; print -dpng CmrrAMP
+figure(5);
+Y = [cellfun(@(x,y) peakcmr(x(:,3), y(:,3)), FD, FC), cellfun(@(x,y) peakcmr(x(:,1), y(:,1)), FD, FC)];
+semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
+xlabel('Frequency (Hz)');
+ylabel('Rejection Ratio (dB)');
+title('CMRR versus Frequency at 10 mV');
+legend('AO','DO','location','best');
+fixplot;
+print -dpng CmrrFRQ
+
+figure(6);
+Y = [cellfun(@(x,y) peakcmr(x(:,3), y(:,3)), AD, AC), cellfun(@(x,y) peakcmr(x(:,1), y(:,1)), AD, AC)];
+semilogx(A, Y(:,1), 'k', A, Y(:,2),'r');
+xlabel('Input (V)');
+ylabel('Rejection Ratio (dB)');
+title('CMRR versus Amplitude at 100 Hz');
+legend('Analog','Digital','location','best');
+fixplot;
+print -dpng CmrrAMP
 
 %% Gain
-figure(7); x = cell2mat(dat(1:end-1,2));
-y = [cellfun(@(x,a) peakmag(x(:,3), 100, a), dat(1:end-1,3), dat(1:end-1,2)),...
-    cellfun(@(x,a) peakmag(x(:,1), 100, a), dat(1:end-1,3), dat(1:end-1,2))];
-semilogx(x,y(:,1),'k',x,y(:,2),'r'); xlabel('Input (V)'); ylabel('Gain (dB)')
-title('Gain for 100 Hz Input'); legend('AO','DO','location','best'); fixplot
+figure(7);
+E = (1+50/5.6)*(1+10/10)*(1+100/10)*(1+5.6/10);
+Y = [cellfun(@(x,a) peakmag(x(:,3), a), AD, num2cell(A)), cellfun(@(x,a) peakmag(x(:,1), a), AD, num2cell(A))];
+semilogx(A, Y(:,1),'k', A, Y(:,2),'r',A,20*log10(E)+A*0,'k:');
+xlabel('Input (V)');
+ylabel('Gain (dB)')
+title('Gain at 100 Hz');
+legend('Analog','Digital','location','best');
+fixplot
 print -dpng Gain
 
 %% Power
-figure(8); x = cell2mat(dat(1:end-1,1));
-y = 1e3*(cellfun(@(x) peakpwr(x(:,2)), dat(1:end-1,3))-...
-    cellfun(@(x) peakpwr(x(:,4)), dat(1:end-1,3)));
-semilogx(x,y(:,1),'k'); xlabel('Frequency (Hz)'); ylabel('Max Power (mW)')
-title('Max Power versus Frequency'); fixplot; print -dpng PowerFRQ
-figure(9); x = cell2mat(dat(1:end-1,2));
-y = 1e3*(cellfun(@(x) peakpwr(x(:,2)), dat(1:end-1,5))-...
-    cellfun(@(x) peakpwr(x(:,4)), dat(1:end-1,5)));
-semilogx(x,y(:,1),'k'); xlabel('Input (V)'); ylabel('Max Power (mW)')
-title('Max Power versus Amplitude'); fixplot; print -dpng PowerAMP
+figure(8);
+Y = 1e3*(cellfun(@(x) peakcur(x(:,2), R(1)), FD) + cellfun(@(x) peakcur(x(:,4), R(2)), FD));
+semilogx(F, Y(:,1), 'k');
+xlabel('Frequency (Hz)');
+ylabel('Max Current (mA)')
+title('Max Current versus Frequency at 10 mV');
+fixplot;
+print -dpng PowerFRQ
+
+figure(9);
+Y = 1e3*(cellfun(@(x) peakcur(x(:,2), R(1)), AD) + cellfun(@(x) peakcur(x(:,4), R(2)), AD));
+semilogx(A, Y(:,1), 'k');
+xlabel('Input (V)');
+ylabel('Max Current (mA)')
+title('Max Current versus Amplitude at 100 Hz');
+fixplot
+print -dpng PowerAMP
 
 %% Auxiliary Functions
-function out = peakout(h, t)
-    hmag = abs(h); db = 20*log10(hmag);
-    out = findpeaks(db,t); out = out(~isinf(out) & ~isnan(out));
-    out = mean(out);
-end
-
-function out = peakmag(y, f, A)
+function out = peakmag(y, A)
     if nargin < 3 || isempty(A); A = 0.01; end
-    t = (1:length(y))'/1e4; x = A*sin(2*pi*f*t); h = y./x;
-    out = peakout(h,t);
+    out = 20*log10(sqrt(bandpower(y/A,1e4,[0 5e3])));
 end
 
 function out = peakcmr(y, x)
-    t = (1:length(y))'/1e4; h = y./x;
-    out = peakout(h,t);
+    out = 20*log10(sqrt(bandpower(y,1e4,[0 5e3])/bandpower(x,1e4,[0 5e3])));
 end
 
-function out = peakpwr(y)
-    t = (1:length(y))'/1e4; h = y*5.02;
-    out = 10^(peakout(h,t)/20);
+function out = peakcur(y, R)
+    out = findpeaks(abs(y)/R, (1:length(y))'/1e4);
+    out = out(~isinf(out) & ~isnan(out));
+    out = mean(out);
 end
