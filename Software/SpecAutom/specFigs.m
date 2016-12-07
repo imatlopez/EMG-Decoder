@@ -66,13 +66,13 @@ print -dpng Gain
 figure(8); x = cell2mat(dat(1:end-1,1));
 y = 1e3*(cellfun(@(x) peakpwr(x(:,2)), dat(1:end-1,3))-...
     cellfun(@(x) peakpwr(x(:,4)), dat(1:end-1,3)));
-semilogx(x,y(:,1),'k'); xlabel('Input (V)'); ylabel('Peak Power (mW)')
-title('Peak Power versus Frequency'); fixplot; print -dpng PowerFRQ
+semilogx(x,y(:,1),'k'); xlabel('Frequency (Hz)'); ylabel('Max Power (mW)')
+title('Max Power versus Frequency'); fixplot; print -dpng PowerFRQ
 figure(9); x = cell2mat(dat(1:end-1,2));
 y = 1e3*(cellfun(@(x) peakpwr(x(:,2)), dat(1:end-1,5))-...
     cellfun(@(x) peakpwr(x(:,4)), dat(1:end-1,5)));
-semilogx(x,y(:,1),'k'); xlabel('Input (V)'); ylabel('Peak Power (mW)')
-title('Peak Power versus Amplitude'); fixplot; print -dpng PowerAMP
+semilogx(x,y(:,1),'k'); xlabel('Input (V)'); ylabel('Max Power (mW)')
+title('Max Power versus Amplitude'); fixplot; print -dpng PowerAMP
 
 %% Auxiliary Functions
 function out = peakout(h, t)
