@@ -30,7 +30,7 @@ DItemRevisionGUID=
 ReportSuppressedErrorsInMessages=0
 FSMCodingStyle=eFMSDropDownList_OneProcess
 FSMEncodingStyle=eFMSDropDownList_OneHot
-OutputPath=
+OutputPath=Project Outputs for Electronics
 LogFolderPath=
 ManagedProjectGUID=
 
@@ -73,23 +73,6 @@ GenerateClassCluster=0
 DocumentUniqueId=JEELIFSU
 
 [Document3]
-DocumentPath=Filtering.SchDoc
-AnnotationEnabled=1
-AnnotateStartValue=1
-AnnotationIndexControlEnabled=0
-AnnotateSuffix=
-AnnotateScope=All
-AnnotateOrder=0
-DoLibraryUpdate=1
-DoDatabaseUpdate=1
-ClassGenCCAutoEnabled=1
-ClassGenCCAutoRoomEnabled=1
-ClassGenNCAutoScope=None
-DItemRevisionGUID=
-GenerateClassCluster=0
-DocumentUniqueId=CQUANEYL
-
-[Document4]
 DocumentPath=Drive.SchDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
@@ -105,6 +88,23 @@ ClassGenNCAutoScope=None
 DItemRevisionGUID=
 GenerateClassCluster=0
 DocumentUniqueId=GWWUFGEW
+
+[Document4]
+DocumentPath=Filtering.SchDoc
+AnnotationEnabled=1
+AnnotateStartValue=1
+AnnotationIndexControlEnabled=0
+AnnotateSuffix=
+AnnotateScope=All
+AnnotateOrder=0
+DoLibraryUpdate=1
+DoDatabaseUpdate=1
+ClassGenCCAutoEnabled=1
+ClassGenCCAutoRoomEnabled=1
+ClassGenNCAutoScope=None
+DItemRevisionGUID=
+GenerateClassCluster=0
+DocumentUniqueId=CQUANEYL
 
 [Document5]
 DocumentPath=Digital.SchDoc
@@ -232,46 +232,38 @@ DocumentPath=Project Outputs for Electronics\NC Drill\Main.TXT
 DItemRevisionGUID=
 
 [GeneratedDocument11]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Plane_1.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument12]
-DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Plane_2.gbr
-DItemRevisionGUID=
-
-[GeneratedDocument13]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument14]
+[GeneratedDocument12]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Copper_Signal_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument15]
+[GeneratedDocument13]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument16]
+[GeneratedDocument14]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Legend_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument17]
+[GeneratedDocument15]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument18]
+[GeneratedDocument16]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Pads_Top.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument19]
+[GeneratedDocument17]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Profile.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument20]
+[GeneratedDocument18]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Soldermask_Bot.gbr
 DItemRevisionGUID=
 
-[GeneratedDocument21]
+[GeneratedDocument19]
 DocumentPath=Project Outputs for Electronics\GerberX2\Main_Soldermask_Top.gbr
 DItemRevisionGUID=
 
@@ -321,7 +313,7 @@ SCH_HasExpandLogicalToPhysicalSheets=-1
 SaveSettingsToOutJob=-1
 
 [Generic_EDE]
-OutputDir=
+OutputDir=Project Outputs for Electronics
 
 [OutputGroup1]
 Name=Netlist Outputs
