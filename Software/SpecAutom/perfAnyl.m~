@@ -1,0 +1,37 @@
+clear;
+%% Import the data
+[~, ~, raw] = xlsread('../../Forms/Testing.xlsx','Analysis');
+dat = cell2mat(raw(2:end,3:23));
+clear raw
+
+%% Organize data
+R = dat(1, 1:7);
+P = zeros(15,7,2);
+for i = 1:3
+    for j = [1 3]
+        P(:,:,i,round(j/2)) = dat(4*(0:4)+j+1,(7*i-6):(7*i));
+    end
+end
+M = permute(squeeze(mean(P,1)),[2 1 3]);
+D = permute(squeeze(std(P,[],1)),[2 1 3])/sqrt(5);
+clear dat
+
+%% Error Bar Plot
+figure(1)
+errorbar(repmat(R',[1 3]),100*M(:,:,2)',100*D(:,:,2)',100*D(:,:,2)')
+xlabel('Gain Resistance (K\Omega)')
+ylabel('False Positive Rate (%)')
+title('False Positive for Increasing Gain Resistance')
+fixplot
+
+%% Lilliefors
+N = zeros(3,7,2);
+for i = 1:3
+    for j = 1:7
+        for k = 1:2
+            [~, N(i,j,k)] = lillietest(P(:,j.i,2));
+        end
+    end
+end
+
+%% 2 Way Anova
