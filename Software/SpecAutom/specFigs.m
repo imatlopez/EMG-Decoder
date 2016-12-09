@@ -23,7 +23,7 @@ t = (0:dt:1-dt)';
 %% Frequency Response
 figure(1);
 Y = [cellfun(@(x,f) peakmag(x(:,3), 1e-2, f), FD, num2cell(F)), cellfun(@(x,f) peakmag(x(:,1), 1e-2, f), FD, num2cell(F))];
-semilogx(F, Y(:,1)-max(Y(:,1)), 'k', F, Y(:,2)-max(Y(:,2)), 'r');
+semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
 xlabel('Frequency (Hz)')
 ylabel('Response (dB)');
 title('Frequency Response for Sinusoidal Input')
