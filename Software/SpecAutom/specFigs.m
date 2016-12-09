@@ -92,6 +92,9 @@ legend('Analog','Digital','location','best');
 fixplot;
 print -dpng SnrAMP
 
+fprintf('BNL1: %f\n', mean(sqrt(AC{1}(:,3).^2)));
+fprintf('BNL2: %f\n', mean(sqrt(AC{1}(:,1).^2)));
+
 %% Power
 figure(7);
 Y = 1e3*(cellfun(@(x) peakcur(x(:,2), R(1)), FD) + cellfun(@(x) peakcur(x(:,4), R(2)), FD));
