@@ -41,7 +41,7 @@ end
 
 %% 2 Way Anova
 close all;
-[H1, T1, S1] = anova2(P(:,:,1),5);
-set(gcf, 'rend','painters','pos',[10 10 360 120]); print -dpng Anv1
-[H2, T2, S2] = anova2(P(:,:,2),5);
-set(gcf, 'rend','painters','pos',[10 10 360 120]); print -dpng Anv2
+[~, T1, S1] = friedman(P(:,:,1),5);
+set(gcf, 'rend','painters','pos',[10 10 400 150]); print -dpng Anv1
+[~, T2, S2] = friedman(P(:,:,2),5);
+set(gcf, 'rend','painters','pos',[10 10 400 150]); print -dpng Anv2
