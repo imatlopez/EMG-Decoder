@@ -27,7 +27,7 @@ semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
 xlabel('Frequency (Hz)')
 ylabel('Response (dB)');
 title('Frequency Response for Sinusoidal Input')
-legend('Analog','Digital','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot;
 print -dpng FRQResp
 
@@ -38,7 +38,7 @@ semilogx(A, Y(:,1),'k', A, Y(:,2),'r');
 xlabel('Input (V)');
 ylabel('Gain (dB)')
 title('Gain at 100 Hz');
-legend('Analog','Digital','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot
 print -dpng Gain
 
@@ -51,7 +51,7 @@ semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
 xlabel('Frequency (Hz)');
 ylabel('Rejection Ratio (dB)');
 title('CMRR versus Frequency at 10 mV');
-legend('AO','DO','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot;
 print -dpng CmrrFRQ
 
@@ -61,7 +61,7 @@ semilogx(A, Y(:,1), 'k', A, Y(:,2),'r');
 xlabel('Input (V)');
 ylabel('Rejection Ratio (dB)');
 title('CMRR versus Amplitude at 100 Hz');
-legend('Analog','Digital','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot;
 print -dpng CmrrAMP
 
@@ -75,7 +75,7 @@ semilogx(F, Y(:,1), 'k', F, Y(:,2), 'r');
 xlabel('Frequency (Hz)');
 ylabel('Signal to Noise Ratio (dB)');
 title('SNR versus Frequency at 10 mV');
-legend('AO','DO','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot;
 print -dpng SnrFRQ
 
@@ -88,7 +88,7 @@ semilogx(A, Y(:,1), 'k', A, Y(:,2),'r');
 xlabel('Input (V)');
 ylabel('Signal to Noise Ratio (dB)');
 title('SNR versus Amplitude at 100 Hz');
-legend('Analog','Digital','location','best');
+legend('Analog','To-Digital','location','best');
 fixplot;
 print -dpng SnrAMP
 
