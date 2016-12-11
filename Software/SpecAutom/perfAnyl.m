@@ -18,6 +18,8 @@ for i = 1:3
 end
 clear dat
 
+%% Bar Plot
+
 %% Error Bar Plot
 figure(1)
 errorbar(repmat(R',[1 3]),100*M(:,:,2)',100*D(:,:,2)',100*D(:,:,2)','LineWidth',3)
@@ -27,6 +29,18 @@ ylabel('False Positive Rate (%)')
 title('False Positive for Increasing Gain Resistance')
 fixplot(28)
 print -dpng SpecPlot
+
+%% Trend Plot
+figure(2)
+L = P(1,:,2); for i = 2:15; L = [L P(i,:,2)]; end %#ok<AGROW>
+L = polyfit(repmat(R,[1 15]),L,1);
+plot(repmat(R',[1 3]),100*M(:,:,2)','o',R,100*polyval(L,R),'k:')
+legend('Bicep','Forearm','Thumb','Trend','location','best')
+xlabel('Gain Resistance (K\Omega)')
+ylabel('False Positive Rate (%)')
+title('False Positive for Increasing Gain Resistance')
+fixplot(28)
+print -dpng LpecPlot
 
 %% Lilliefors
 N = zeros(6,7);
