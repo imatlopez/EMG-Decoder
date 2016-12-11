@@ -20,11 +20,12 @@ clear dat
 
 %% Error Bar Plot
 figure(1)
-errorbar(repmat(R',[1 3]),100*M(:,:,2)',100*D(:,:,2)',100*D(:,:,2)')
+errorbar(repmat(R',[1 3]),100*M(:,:,2)',100*D(:,:,2)',100*D(:,:,2)','LineWidth',3)
+legend('Bicep','Forearm','Thumb','location','best')
 xlabel('Gain Resistance (K\Omega)')
 ylabel('False Positive Rate (%)')
 title('False Positive for Increasing Gain Resistance')
-fixplot
+fixplot(28)
 print -dpng SpecPlot
 
 %% Lilliefors
